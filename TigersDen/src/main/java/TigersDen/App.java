@@ -1,7 +1,5 @@
 package TigersDen;
 
-//import org.reflections.Reflections;
-//import org.reflections.scanners.Scanners;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.JSONObject;

@@ -36,7 +36,7 @@ dependencies {
 
 application {
     // Define the main class for the application
-    mainClassName = 'XXLChess.App'
+    mainClassName = 'TigersDen.App'
 }
 
 test {
@@ -48,7 +48,7 @@ test {
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': 'XXLChess.App'
+        attributes 'Main-Class': 'TigersDen.App'
     }
     from {
         configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }

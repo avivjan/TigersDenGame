@@ -1,9 +1,12 @@
 package TigersDen.DAL.Contract;
 
-interface IGenericAccessor<T extends IStorable> {
+import java.util.List;
+import java.util.UUID;
+
+public interface IGenericAccessor<T extends IStorable> {
     List<T> getAll();
-    T getById(int id);
+    T getById(UUID id);
     void add(T item);
     void update(T item);
-    void delete(int id);
+    void delete(UUID id);
 }

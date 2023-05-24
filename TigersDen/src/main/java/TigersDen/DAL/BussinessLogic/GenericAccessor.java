@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
 import TigersDen.DAL.Contract.*;
 
 public class GenericAccessor<T extends IStorable> implements IGenericAccessor<T> {
-    private Map<Integer, T> dataStore;
+    private Map<UUID, T> dataStore;
 
     public GenericAccessor() {
         dataStore = new HashMap<>();
@@ -19,26 +21,28 @@ public class GenericAccessor<T extends IStorable> implements IGenericAccessor<T>
     }
 
     @Override
-    public T getById(int id) {
+    public T getById(UUID id) {
+        // Assuming UUID is used as the unique identifier
         return dataStore.get(id);
     }
 
     @Override
     public void add(T item) {
-        int id = item.getId();
-        dataStore.put(id, item);
+        UUID guid = item.getId();
+        dataStore.put(guid, item);
     }
 
     @Override
     public void update(T item) {
-        int id = item.getId();
-        if (dataStore.containsKey(id)) {
-            dataStore.put(id, item);
+        UUID guid = item.getId();
+        if (dataStore.containsKey(guid)) {
+            dataStore.put(guid, item);
         }
     }
 
+
     @Override
-    public void delete(int id) {
+    public void delete(UUID id) {
         dataStore.remove(id);
     }
 }

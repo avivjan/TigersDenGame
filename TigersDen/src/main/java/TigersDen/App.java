@@ -9,6 +9,15 @@ import processing.event.MouseEvent;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import TigersDen.BL.BoardService.BussinessLogic.Board;
+import TigersDen.DAL.Contract.IGenericAccessor;
+import TigersDen.DAL.DataModel.BoardData;
+import TigersDen.DI.GuiceModule;
+
 import java.awt.Font;
 import java.io.*;
 import java.util.*;
@@ -43,14 +52,7 @@ public class App extends PApplet {
     */
     public void setup() {
         frameRate(FPS);
-
-        // Load images during setup
-
-        // PImage spr = loadImage("src/main/resources/XXLChess/"+...);
-
-		// load config
-        JSONObject conf = loadJSONObject(new File(this.configPath));
-        
+        Injector injector = Guice.createInjector(new GuiceModule());
     }
 
     /**

@@ -1,3 +1,6 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "codegpt.apiKey": "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",
+    "codegpt.model": "text-davinci-003"
 }

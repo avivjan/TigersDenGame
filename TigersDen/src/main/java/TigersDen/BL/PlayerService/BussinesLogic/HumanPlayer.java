@@ -4,8 +4,8 @@ import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public class HumanPlayer extends AbstractPlayer{
-    public HumanPlayer() {
-        super("", "");
+    public HumanPlayer(String name, String color) {
+        super(name, color);
     }
 
     @Override

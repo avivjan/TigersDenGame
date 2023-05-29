@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
+import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 import TigersDen.DAL.Contract.IBoardData;
 import TigersDen.DI.GuiceModule;
 import TigersDen.UI.DrawingService.Contract.IDrawingService;
@@ -19,7 +20,9 @@ public class GameManager {
             Injector injector = Guice.createInjector(new GuiceModule());
             IDrawingService drawingService = injector.getInstance(IDrawingService.class);
             IObjectCreator objectCreator = injector.getInstance(IObjectCreator.class);
-            IBoardData boardData = injector.getInstance(IBoardData.class);
+            IBoardData boardData = injector.getInstance(IBoardData.class);//TODO: remove this line
+            
+            injector.getInstance(ITurnManager.class).initialize();;
             objectCreator.createBoard();
             objectCreator.createPieces();
             //objectCreator.createPlayers();

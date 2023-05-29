@@ -3,10 +3,10 @@ package TigersDen;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.DAL.Contract.IBoardData;
 import TigersDen.DI.GuiceModule;
 import TigersDen.UI.DrawingService.Contract.IDrawingService;
-import TigersDen.UI.DrawingService.Contract.IObjectCreator;
 
 public class GameManager {
     private IDrawingService drawingService;
@@ -21,10 +21,13 @@ public class GameManager {
             IObjectCreator objectCreator = injector.getInstance(IObjectCreator.class);
             IBoardData boardData = injector.getInstance(IBoardData.class);
             objectCreator.createBoard();
-            //objectCreator.createPieces();
+            objectCreator.createPieces();
             //objectCreator.createPlayers();
             drawingService.createFrame();
             drawingService.drawBoard();
+            drawingService.drawPieces();
+
+            int a = 0;
         }
         catch(Exception e)
         {

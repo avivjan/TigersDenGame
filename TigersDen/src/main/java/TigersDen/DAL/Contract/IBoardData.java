@@ -1,8 +1,11 @@
 package TigersDen.DAL.Contract;
 
+import java.util.List;
+
 import javax.swing.JButton;
 
 import TigersDen.BL.BoardService.Contract.ICoordinate;
+import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 
 public interface IBoardData {
@@ -14,7 +17,7 @@ public interface IBoardData {
 
     // void setSelectedCell(ICell cell);
 
-    // void addPiece(IPiece piece, ICoordinate coordinate);
+    void addPiece(IPiece piece);
     
     int getCellSizeInPixels();
 
@@ -29,7 +32,7 @@ public interface IBoardData {
 
     // void addCell(ICell cell, Coordinate coordinate);
 
-    // List<IPiece> getPieces();
+    List<IPiece> getPieces();
 
     // void addPlayer(IPlayer player);
 

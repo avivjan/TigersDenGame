@@ -1,8 +1,8 @@
-package TigersDen.BL.BoardService.BussinessLogic;
+package TigersDen.BL.BoardService.BussinessLogic.Pieces;
 
 import java.util.List;
 
-import TigersDen.BL.BoardService.Contract.IBoard;
+import TigersDen.BL.BoardService.BussinessLogic.AbstractPiece;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Model.ICell;
 
@@ -13,7 +13,7 @@ public class PawnPiece extends AbstractPiece {
     }
 
     @Override
-    public List<ICell> getOptionalMovements(IBoard board) throws Exception {
+    public List<ICell> getOptionalMovements() throws Exception {
         return null;
     }
 }

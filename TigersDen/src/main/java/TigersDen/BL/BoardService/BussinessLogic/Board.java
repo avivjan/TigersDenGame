@@ -1,13 +1,15 @@
 package TigersDen.BL.BoardService.BussinessLogic;
 
+import java.util.List;
+
 import javax.swing.JButton;
 
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
+import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
-import TigersDen.DAL.BussinessLogic.BoardData;
 import TigersDen.DAL.Contract.IBoardData;
 
 public class Board implements IBoard {
@@ -33,6 +35,7 @@ public class Board implements IBoard {
         return boardData.getCellSizeInPixels();
     }
 
+
     @Override
     public void setButtonOfCell(ICoordinate cor, JButton button) {
         if (cor.isSpacial()){
@@ -52,5 +55,15 @@ public class Board implements IBoard {
     @Override
     public ICell getTigerDenCell() {
         return boardData.getTigerDenCell();
+    }
+    
+    @Override
+    public List<IPiece> getPieces() {
+        return boardData.getPieces();
+    }
+
+    @Override
+    public void addPiece(IPiece piece) {
+        boardData.addPiece(piece);
     }
 }

@@ -1,5 +1,7 @@
 package TigersDen.BL.BoardService.Contract;
 
+import java.util.List;
+
 import javax.swing.JButton;
 import TigersDen.BL.BoardService.Model.ICell;
 
@@ -19,5 +21,6 @@ public interface IBoard {
     int getNumOfCols();
     int getCellSizeInPixels();
     void setButtonOfCell(ICoordinate coordinate, JButton button);
-
+    List<IPiece> getPieces();
+    void addPiece(IPiece piece);
 }

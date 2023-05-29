@@ -1,4 +1,4 @@
-package TigersDen.UI.DrawingService.BussinessLogic;
+package TigersDen.BL.BoardService.BussinessLogic;
 
 import java.awt.Color;
 
@@ -6,14 +6,11 @@ import javax.swing.JButton;
 
 import com.google.inject.Inject;
 
-import TigersDen.BL.BoardService.BussinessLogic.Cell;
-import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
+import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
-import TigersDen.BL.BoardService.DataModel.CellStatus;
-import TigersDen.BL.BoardService.Model.ICell;
-import TigersDen.DAL.Contract.IBoardData;
-import TigersDen.UI.DrawingService.Contract.IObjectCreator;
+import TigersDen.BL.BoardService.Contract.IObjectCreator;
+import TigersDen.BL.BoardService.Contract.IPiece;
 
 public class ObjectCreator implements IObjectCreator {
     private final int SPRITESIZE = 480;// TODO: move to config/DAL
@@ -36,7 +33,7 @@ public class ObjectCreator implements IObjectCreator {
     public void createBoard() {
         
         JButton lionTenbButton = new JButton();
-        lionTenbButton.setBounds(numOfCols * cellSize / 2 - (cellSize / 2), 0, cellSize, cellSize);
+        lionTenbButton.setBounds((numOfCols / 2) * cellSize , 0, cellSize, cellSize);
         lionTenbButton.setOpaque(true);
         lionTenbButton.setBackground(Color.orange);
         lionTenbButton.setBorderPainted(true);
@@ -49,7 +46,7 @@ public class ObjectCreator implements IObjectCreator {
             }
         });
 
-        ICoordinate cor =Coordinate.createInstance(0,0, false, true);
+        ICoordinate cor =Coordinate.createSpacialInstance();
         board.setButtonOfCell(cor,  lionTenbButton);
         
         for (int i = 0; i < numOfRows; i++) {
@@ -67,7 +64,7 @@ public class ObjectCreator implements IObjectCreator {
                         e1.printStackTrace();
                     }
                 });
-                ICoordinate coordinate =Coordinate.createInstance(i, j, false, false);
+                ICoordinate coordinate =Coordinate.createInstance(i, j, false);
                 board.setButtonOfCell(coordinate, button);
             }
         }
@@ -76,8 +73,20 @@ public class ObjectCreator implements IObjectCreator {
 
     @Override
     public void createPieces() {
-        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
-                                                                       // Tools | Templates.
+        try
+        {
+            IPiece piece = new PawnPiece(Coordinate.createSpacialInstance());
+            board.addPiece(piece);
+
+            for (int row = numOfRows - 2; row < numOfRows; row++) {
+                for (int column = 0; column < numOfCols; column++) {
+                    board.addPiece(new PawnPiece(Coordinate.createInstance(row, column, false)));
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error in createPieces");
+            e.printStackTrace();
+        }
     }
 
     @Override

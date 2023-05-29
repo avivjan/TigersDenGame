@@ -1,4 +1,4 @@
-package TigersDen.UI.DrawingService.Contract;
+package TigersDen.BL.BoardService.Contract;
 
 public interface IObjectCreator {
     void createBoard();

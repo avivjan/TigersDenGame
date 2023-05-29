@@ -7,36 +7,37 @@ public class Coordinate implements ICoordinate {
     private int column;
     private boolean isSpacial;
     private static int cellSize = 48;
-    private static int numOfRows;
-    private static int numOfCols;;
-    
+    private static int numOfRows = 9;;// TODO: handle hard coded values
+    private static int numOfCols = 9;// TODO: handle hard coded values
 
     private Coordinate(int row, int column, boolean isSpacial) {
-        this.row = row;
-        this.column = column;
-        this.isSpacial = isSpacial;
+            this.row = row;
+            this.column = column;
+            this.isSpacial = isSpacial;
     }
 
-    public static Coordinate createInstance(int x, int y, boolean inPixels, boolean isSpacial) {
-        if (isSpacial) {
-            return new Coordinate(-1, -1, true);
+    public static Coordinate createSpacialInstance() {
+        return new Coordinate(-1, numOfCols / 2, true);
+    }
+
+    public static Coordinate createInstance(int x, int y, boolean inPixels) {
+        if (!isOnBoard(x, y, inPixels)) {
+            throw new IllegalArgumentException("x and y must be on board");
         }
-        if (!inPixels) {
+        if (inPixels) {
+            int row = y / cellSize;
+            int column = x / cellSize;
+            return new Coordinate(column, row, false);
+
+        } else {
             return new Coordinate(x, y, false);
         }
 
-        if (!isOnBoard(x, y)) {
-            return null;
-        }
-        int row = y / cellSize;
-        int column = x / cellSize;
-        return new Coordinate(column, row, false);
     }
 
     @Override
     public int getRow() {
-        if (this.isSpacial)
-        {
+        if (this.isSpacial) {
             return -1;
         }
         return row;
@@ -44,7 +45,7 @@ public class Coordinate implements ICoordinate {
 
     @Override
     public void setRow(int row) {
-        if (row < 0 || row >= numOfRows) {
+        if (row < -1 || row >= numOfRows) {
             throw new IllegalArgumentException("row must be between 0 and " + numOfRows);
         }
         this.row = row;
@@ -52,10 +53,6 @@ public class Coordinate implements ICoordinate {
 
     @Override
     public int getColumn() {
-        if (this.isSpacial)
-        {
-            return -1;
-        }
         return column;
     }
 
@@ -66,10 +63,12 @@ public class Coordinate implements ICoordinate {
         }
         this.column = column;
     }
+
     @Override
     public boolean isSpacial() {
         return isSpacial;
     }
+
     @Override
     public void setSpacial(boolean isSpacial) {
         this.isSpacial = isSpacial;
@@ -77,19 +76,11 @@ public class Coordinate implements ICoordinate {
 
     @Override
     public int getXInPixels() {
-        if (this.isSpacial)
-        {
-            return 0;
-        }
         return (row + 1) * cellSize;
     }
 
     @Override
     public int getYInPixels() {
-        if (this.isSpacial)
-        {
-            return numOfCols * cellSize / 2 - (cellSize / 2);
-        }
         return column * cellSize;
     }
 
@@ -119,11 +110,12 @@ public class Coordinate implements ICoordinate {
         int y2 = coordinate.getYInPixels();
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
-    
 
-    public static boolean isOnBoard(int getXInPixels, int getYInPixels) {
-        return getXInPixels >= 0 && getXInPixels < numOfCols * cellSize && getYInPixels >= 0
-                && getYInPixels < numOfRows * cellSize;
+    public static boolean isOnBoard(int x, int y, boolean inPixels) {
+        if (inPixels) {
+            return x >= 0 && x < numOfCols * cellSize && y >= 0 && y < numOfRows * cellSize;
+        }
+        return x >= 0 && x < numOfCols && y >= 0 && y < numOfRows;
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import TigersDen.BL.BoardService.Model.ICell;
 
 public interface IPiece {
-    List<ICell> getOptionalMovements(IBoard board) throws Exception;
+    List<ICell> getOptionalMovements() throws Exception;
     //void startMoving(ICell cell) throws Exception;
     //void capture();
     //IPlayer getOwningPlayer();

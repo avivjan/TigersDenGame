@@ -15,6 +15,7 @@ import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.BoardService.Contract.IPiece;
+import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
 import TigersDen.BL.TurnManager.BussinessLogic.TurnManager;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 import TigersDen.DI.GuiceModule;
@@ -41,7 +42,7 @@ public class ObjectCreator implements IObjectCreator {
     public void createBoard() throws Exception {
         
 
-        CustomButton lionTenbButton = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(ITurnManager.class));
+        CustomButton lionTenbButton = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(IEventHandlerService.class));
         lionTenbButton.setBounds((numOfCols / 2) * cellSize , 0, cellSize, cellSize);
         lionTenbButton.setOpaque(true);
         lionTenbButton.setBackground(Color.orange);
@@ -61,7 +62,7 @@ public class ObjectCreator implements IObjectCreator {
         
         for (int i = 0; i < numOfRows; i++) {
             for (int j = 0; j < numOfCols; j++) {
-                CustomButton button = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(ITurnManager.class));
+                CustomButton button = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(IEventHandlerService.class));
                 button.setBounds(j * cellSize, (i + 1) * cellSize, cellSize, cellSize);
                 button.setOpaque(true);
                 button.setBackground(Color.orange);

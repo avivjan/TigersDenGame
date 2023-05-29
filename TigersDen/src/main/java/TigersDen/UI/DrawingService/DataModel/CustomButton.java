@@ -1,34 +1,31 @@
 package TigersDen.UI.DrawingService.DataModel;
 
+import java.awt.Graphics;
+
 import javax.swing.JButton;
 
-import org.checkerframework.checker.units.qual.C;
-
-import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Model.ICell;
-import TigersDen.BL.TurnManager.Contracts.ITurnManager;
-import java.awt.Graphics;
+import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
 
 public class CustomButton extends JButton {
     private ICell cell;
-    private ITurnManager turnManager;
-    
+    private IEventHandlerService eventHandlerService;
 
-    public CustomButton(ICell cell, ITurnManager turnManager) {
+    public CustomButton(IEventHandlerService eventHandlerService1) {
         super();
-        this.cell = cell;
-        this.turnManager = turnManager;
-    }
-    public CustomButton(ITurnManager turnManager) {
-        super();
-        this.turnManager = turnManager;
+        this.eventHandlerService = eventHandlerService1;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //turnManager.getPlayerInTurn().play();
+        if (getModel().isPressed()) {
+
+            eventHandlerService.handleClick(cell);
+        }
     }
-    public void setCell(ICell cell2) {
+
+    public void setCell(ICell cell) {
+        this.cell = cell;
     }
 }

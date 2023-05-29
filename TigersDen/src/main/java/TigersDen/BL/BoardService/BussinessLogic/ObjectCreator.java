@@ -11,6 +11,7 @@ import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.BoardService.Contract.IPiece;
+import TigersDen.UI.DrawingService.BussinessLogic.CustomButton;
 
 public class ObjectCreator implements IObjectCreator {
     private final int SPRITESIZE = 480;// TODO: move to config/DAL
@@ -32,7 +33,7 @@ public class ObjectCreator implements IObjectCreator {
     @Override
     public void createBoard() {
         
-        JButton lionTenbButton = new JButton();
+        JButton lionTenbButton = new CustomButton();
         lionTenbButton.setBounds((numOfCols / 2) * cellSize , 0, cellSize, cellSize);
         lionTenbButton.setOpaque(true);
         lionTenbButton.setBackground(Color.orange);
@@ -51,7 +52,7 @@ public class ObjectCreator implements IObjectCreator {
         
         for (int i = 0; i < numOfRows; i++) {
             for (int j = 0; j < numOfCols; j++) {
-                JButton button = new JButton();
+                JButton button = new CustomButton();
                 button.setBounds(j * cellSize, (i + 1) * cellSize, cellSize, cellSize);
                 button.setOpaque(true);
                 button.setBackground(Color.orange);

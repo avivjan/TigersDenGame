@@ -14,8 +14,6 @@ public class CpuPlayer extends AbstractPlayer{
         {
             throw new Exception("The play method of the CpuPlayer class should not be called with a cell.");
         }
+        //AI!
     }
-
-   
-    
 }

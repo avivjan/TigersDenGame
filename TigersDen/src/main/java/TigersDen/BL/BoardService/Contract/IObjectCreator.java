@@ -1,7 +1,7 @@
 package TigersDen.BL.BoardService.Contract;
 
 public interface IObjectCreator {
-    void createBoard();
+    void createBoard() throws Exception;
     void createPieces();
     void createPlayers();
    

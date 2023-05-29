@@ -4,14 +4,21 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 
+import org.checkerframework.checker.units.qual.C;
+
+import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.spi.Dependency;
 
 import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.BoardService.Contract.IPiece;
-import TigersDen.UI.DrawingService.BussinessLogic.CustomButton;
+import TigersDen.BL.TurnManager.BussinessLogic.TurnManager;
+import TigersDen.BL.TurnManager.Contracts.ITurnManager;
+import TigersDen.DI.GuiceModule;
+import TigersDen.UI.DrawingService.DataModel.CustomButton;
 
 public class ObjectCreator implements IObjectCreator {
     private final int SPRITESIZE = 480;// TODO: move to config/DAL
@@ -31,9 +38,10 @@ public class ObjectCreator implements IObjectCreator {
     }
 
     @Override
-    public void createBoard() {
+    public void createBoard() throws Exception {
         
-        JButton lionTenbButton = new CustomButton();
+
+        CustomButton lionTenbButton = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(ITurnManager.class));
         lionTenbButton.setBounds((numOfCols / 2) * cellSize , 0, cellSize, cellSize);
         lionTenbButton.setOpaque(true);
         lionTenbButton.setBackground(Color.orange);
@@ -49,10 +57,11 @@ public class ObjectCreator implements IObjectCreator {
 
         ICoordinate cor =Coordinate.createSpacialInstance();
         board.setButtonOfCell(cor,  lionTenbButton);
+        lionTenbButton.setCell(board.getTigerDenCell());
         
         for (int i = 0; i < numOfRows; i++) {
             for (int j = 0; j < numOfCols; j++) {
-                JButton button = new CustomButton();
+                CustomButton button = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(ITurnManager.class));
                 button.setBounds(j * cellSize, (i + 1) * cellSize, cellSize, cellSize);
                 button.setOpaque(true);
                 button.setBackground(Color.orange);
@@ -67,6 +76,7 @@ public class ObjectCreator implements IObjectCreator {
                 });
                 ICoordinate coordinate =Coordinate.createInstance(i, j, false);
                 board.setButtonOfCell(coordinate, button);
+                button.setCell(board.getCell(coordinate));
             }
         }
 
@@ -74,8 +84,7 @@ public class ObjectCreator implements IObjectCreator {
 
     @Override
     public void createPieces() {
-        try
-        {
+        try {
             IPiece piece = new PawnPiece(Coordinate.createSpacialInstance());
             board.addPiece(piece);
 

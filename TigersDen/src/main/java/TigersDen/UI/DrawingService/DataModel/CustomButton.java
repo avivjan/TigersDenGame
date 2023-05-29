@@ -1,20 +1,34 @@
-package TigersDen.UI.DrawingService.BussinessLogic;
+package TigersDen.UI.DrawingService.DataModel;
 
 import javax.swing.JButton;
-import java.awt.Color;
+
+import org.checkerframework.checker.units.qual.C;
+
+import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
+import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 import java.awt.Graphics;
 
 public class CustomButton extends JButton {
-    private boolean isPressed = false;
+    private ICell cell;
+    private ITurnManager turnManager;
+    
+
+    public CustomButton(ICell cell, ITurnManager turnManager) {
+        super();
+        this.cell = cell;
+        this.turnManager = turnManager;
+    }
+    public CustomButton(ITurnManager turnManager) {
+        super();
+        this.turnManager = turnManager;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
-        // Perform default painting
         super.paintComponent(g);
-
-        // Access the ButtonModel
-        if (getModel().isPressed()) {
-            g.setColor(Color.black);
-            g.fillRect(0, 0, getWidth(), getHeight());
-        }
+        //turnManager.getPlayerInTurn().play();
+    }
+    public void setCell(ICell cell2) {
     }
 }

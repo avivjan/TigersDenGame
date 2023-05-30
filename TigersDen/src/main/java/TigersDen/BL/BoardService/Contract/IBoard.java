@@ -2,25 +2,35 @@ package TigersDen.BL.BoardService.Contract;
 
 import java.util.List;
 
-import javax.swing.JButton;
 import TigersDen.BL.BoardService.Model.ICell;
 
 public interface IBoard {
     ICell getCell(ICoordinate coordinate) throws Exception;
+
     ICell getTigerDenCell();
-    
-    //ICell getSelectedCell();
-    //void setSelectedCell(ICell cell);
- 
-    //float getMaxMoveDuration();
-    //float getMovingSpeed();
-    //void selectCell(ICell cell);
-    //void DeselectCellIfExists();
-    //void addOptionCells(ICell optionCell);
+
+    // float getMaxMoveDuration(); TODO: move to config
+    // float getMovingSpeed(); TODO: move to config
+
+    ICell getSelectedCell();
+
+    void setSelectedCell(ICell cell);
+
+    void selectCell(ICell cell);
+
+    void DeselectCellIfExists();
+
+    void addOptionCells(ICell optionCell);
+
     int getNumOfRows();
+
     int getNumOfCols();
-    int getCellSizeInPixels();
-    void setButtonOfCell(ICoordinate coordinate, JButton button);
+
     List<IPiece> getPieces();
-    void addPiece(IPiece piece);
+
+    void addPiece(IPiece piece) throws Exception;
+
+    void addCell(ICell cell);
+
+    List<ICell> getCells();
 }

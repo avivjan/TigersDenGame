@@ -1,7 +1,7 @@
 package TigersDen.UI.DrawingService.DataModel;
 
+import java.awt.Color;
 import java.awt.Graphics;
-
 import javax.swing.JButton;
 
 import TigersDen.BL.BoardService.Model.ICell;
@@ -14,18 +14,22 @@ public class CustomButton extends JButton {
     public CustomButton(IEventHandlerService eventHandlerService1) {
         super();
         this.eventHandlerService = eventHandlerService1;
+        this.setFocusPainted(false);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (getModel().isPressed()) {
-
-            eventHandlerService.handleClick(cell);
-        }
+        // if (getModel().isArmed()) {
+        //     eventHandlerService.handleClick(cell);
+        // }
+        // btn.getModel()
+        // });
     }
 
     public void setCell(ICell cell) {
         this.cell = cell;
     }
+
+    
 }

@@ -5,11 +5,12 @@ import java.util.List;
 import TigersDen.BL.BoardService.BussinessLogic.AbstractPiece;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public class TigerPiece extends AbstractPiece {
 
-    public TigerPiece(ICoordinate coordinate2) {
-        super(coordinate2);
+    public TigerPiece(ICoordinate coordinate2, IPlayer player) {
+        super(coordinate2, player);
     }
 
     @Override

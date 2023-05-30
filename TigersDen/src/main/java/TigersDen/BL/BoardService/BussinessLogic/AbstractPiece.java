@@ -1,16 +1,19 @@
 package TigersDen.BL.BoardService.BussinessLogic;
 
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
+
 import TigersDen.BL.BoardService.Contract.*;
+import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public abstract class AbstractPiece implements IPiece {
     private ICoordinate coordinate;
-    //private boolean isCaptured;
-    //private IPlayer owningPlayer;
+    private boolean isCaptured;
+    private IPlayer owningPlayer;
     //protected IMovingService movingService;
 
-    public AbstractPiece(ICoordinate coordinate2){//, IPlayer owningPlayer, IMovingService movingSevice) {
+    public AbstractPiece(ICoordinate coordinate2, IPlayer owningPlayer){
         this.coordinate = coordinate2;
-        //this.owningPlayer = owningPlayer;
+        this.owningPlayer = owningPlayer;
         //this.movingService = movingSevice;
     }
 
@@ -26,21 +29,23 @@ public abstract class AbstractPiece implements IPiece {
     //     }
     // }
 
-    // @Override
-    // public void capture() {
-    //     isCaptured = true;
-    // }
+    @Override
+    public void capture() {
+        isCaptured = true;
+    }
 
-    // @Override
-    // public boolean isCaptured() {
-    //     return isCaptured;
-    // }
+   
+
+    @Override
+    public boolean isCaptured() {
+        return isCaptured;
+    }
 
 
-    // @Override
-    // public IPlayer getOwningPlayer() {
-    //     return owningPlayer;
-    // }
+    @Override
+    public IPlayer getOwningPlayer() {
+        return owningPlayer;
+    }
 
     @Override
     public ICoordinate getCoordinate() {

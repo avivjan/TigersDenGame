@@ -1,25 +1,15 @@
 package TigersDen.BL.BoardService.BussinessLogic;
 
-import java.awt.Color;
-
-import javax.swing.JButton;
-
-import org.checkerframework.checker.units.qual.C;
-
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.spi.Dependency;
 
 import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.BoardService.Contract.IPiece;
-import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
-import TigersDen.BL.TurnManager.BussinessLogic.TurnManager;
+import TigersDen.BL.BoardService.DataModel.CellStatus;
+import TigersDen.BL.PlayerService.BussinesLogic.HumanPlayer;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
-import TigersDen.DI.GuiceModule;
-import TigersDen.UI.DrawingService.DataModel.CustomButton;
 
 public class ObjectCreator implements IObjectCreator {
     private final int SPRITESIZE = 480;// TODO: move to config/DAL
@@ -32,78 +22,51 @@ public class ObjectCreator implements IObjectCreator {
     public int HEIGHT = cellSize * (numOfRows + 1) + windowLabel;
 
     private IBoard board;
+    private ITurnManager turnManager;
 
     @Inject
-    public ObjectCreator(IBoard board) {
+    public ObjectCreator(IBoard board, ITurnManager turnManager) {
         this.board = board;
+        this.turnManager = turnManager;
     }
 
     @Override
-    public void createBoard() throws Exception {
-        
-
-        CustomButton lionTenbButton = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(IEventHandlerService.class));
-        lionTenbButton.setBounds((numOfCols / 2) * cellSize , 0, cellSize, cellSize);
-        lionTenbButton.setOpaque(true);
-        lionTenbButton.setBackground(Color.orange);
-        lionTenbButton.setBorderPainted(true);
-        lionTenbButton.setName("Tiger's Den");
-        lionTenbButton.addActionListener(e -> {
-            try {
-                System.out.println("Button clicked: " + lionTenbButton.getName());
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        });
-
-        ICoordinate cor =Coordinate.createSpacialInstance();
-        board.setButtonOfCell(cor,  lionTenbButton);
-        lionTenbButton.setCell(board.getTigerDenCell());
-        
-        for (int i = 0; i < numOfRows; i++) {
-            for (int j = 0; j < numOfCols; j++) {
-                CustomButton button = new CustomButton(Guice.createInjector(new GuiceModule()).getInstance(IEventHandlerService.class));
-                button.setBounds(j * cellSize, (i + 1) * cellSize, cellSize, cellSize);
-                button.setOpaque(true);
-                button.setBackground(Color.orange);
-                button.setBorderPainted(true);
-                button.setName(i + "," + j);
-                button.addActionListener(e -> {
-                    try {
-                        System.out.println("Button clicked: " + ((JButton)e.getSource()).getName());
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                });
-                ICoordinate coordinate =Coordinate.createInstance(i, j, false);
-                board.setButtonOfCell(coordinate, button);
-                button.setCell(board.getCell(coordinate));
+    public void createPlayers() {
+        // TODO  a config file, creates players and add them to turn manager !!!!!!!!
+        // TODO  a config file, creates players and add them to turn manager !!!!!!!!
+        // TODO  a config file, creates players and add them to turn manager !!!!!!!!
+    
+        turnManager.addPlayer(new HumanPlayer("Player1", "white"));
+    }
+    @Override
+    public void createBoard() {
+        for (int row = 0; row < numOfRows; row++) {
+            for (int col = 0; col < numOfCols; col++) {
+                board.addCell(new Cell(CellStatus.None, false, Coordinate.createInstance(row, col, false), null));
             }
         }
-
+        board.addCell(new Cell(CellStatus.None, false, Coordinate.createSpacialInstance(), null));
     }
+
+
 
     @Override
     public void createPieces() {
         try {
-            IPiece piece = new PawnPiece(Coordinate.createSpacialInstance());
+            IPiece piece = new PawnPiece(Coordinate.createSpacialInstance(), new HumanPlayer("Player1", "white"));//TODO:change player
             board.addPiece(piece);
 
             for (int row = numOfRows - 2; row < numOfRows; row++) {
                 for (int column = 0; column < numOfCols; column++) {
-                    board.addPiece(new PawnPiece(Coordinate.createInstance(row, column, false)));
+                    ICoordinate tempCor = Coordinate.createInstance(row, column, false);
+                    piece = new PawnPiece(tempCor, new HumanPlayer("Player1", "white"));//Change Player!
+                    board.addPiece(piece);
                 }
             }
         } catch (Exception e) {
             System.err.println("Error in createPieces");
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void createPlayers() {
-        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
-                                                                       // Tools | Templates.
     }
 
 }

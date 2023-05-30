@@ -1,7 +1,9 @@
 package TigersDen.UI.DrawingService.Contract;
 
-public interface IDrawingService {
-    void createFrame() throws Exception;
-    void drawBoard() throws Exception;
-    void drawPieces() throws Exception;
+import TigersDen.BL.BoardService.Contract.IPiece;
+import TigersDen.BL.BoardService.Model.ICell;
+
+public interface IDrawingService 
+{
+    void draw() throws Exception;
 }

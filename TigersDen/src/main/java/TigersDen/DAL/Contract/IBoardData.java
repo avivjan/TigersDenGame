@@ -9,13 +9,13 @@ import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 
 public interface IBoardData {
-    ICell getCell(ICoordinate coordinate) throws Exception;
+    ICell getCell(ICoordinate coordinate);
 
     ICell getTigerDenCell();
 
-    // ICell getSelectedCell();
+    ICell getSelectedCell();
 
-    // void setSelectedCell(ICell cell);
+    void setSelectedCell(ICell cell);
 
     void addPiece(IPiece piece);
     
@@ -25,21 +25,18 @@ public interface IBoardData {
 
     int getNumOfRows();
 
-    void setButtonOfCell(ICoordinate coordinate, JButton button);
-
-    void setButtonOfTigerDen(JButton button);
-
-
-    // void addCell(ICell cell, Coordinate coordinate);
+    void addCell(ICell cell);
 
     List<IPiece> getPieces();
 
-    // void addPlayer(IPlayer player);
-
-    // IPlayer getPlayer(String color);
-
-    // List<ICell> getOptionalCells();
+    List<ICell> getOptionalCells();
     
-    // void addOptionCells(ICell optionCell);
+    void addOptionCells(ICell optionCell);
+
+    void selectCell(ICell cell);
+    
+    void DeselectCellIfExists(); 
+
+    List<ICell> getCells();
     
 }

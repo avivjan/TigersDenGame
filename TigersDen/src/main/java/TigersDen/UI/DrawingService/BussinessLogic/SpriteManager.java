@@ -5,36 +5,45 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
+import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.UI.DrawingService.Contract.ISpriteManager;
+import processing.core.PImage;
 
 public class SpriteManager implements ISpriteManager {
-    private ImageIcon whitePawn;
-    private ImageIcon blackpawn;
+    private PImage whitePawn;
+    private PImage blackPawn;
     private boolean inisialized = false;
 
     @Override
-    public ImageIcon getSprite(IPiece piece) throws IOException {
+    public PImage getSprite(IPiece piece, String color) {
         if (!inisialized) {
             inisialize();
             inisialized = true;
         }
-        return whitePawn;
+        if (piece instanceof PawnPiece) {
+            if (color.equals("black")) {
+                return blackPawn;
+            } else if (color.equals("white")) {
+                return whitePawn;
+            }
+        }
+        throw new IllegalArgumentException(
+                "Invalid piece type or color: " + piece.getClass().getSimpleName() + ", " + color);
     }
 
-    private void inisialize() throws IOException {
-        Image whitePawnImage = ImageIO.read(new File("src/main/resources/TigersDen/w-pawn.png"));
-        Image blackPawnImage = ImageIO.read(new File("src/main/resources/TigersDen/b-pawn.png"));
+    private void inisialize()  {
 
-        Image scaledWhitePawnImage = whitePawnImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);//TODO: handle hardCoded!
-        Image scaledBlackPawnImage = blackPawnImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        try {
+            Image whitePawnImage = ImageIO.read(new File("src/main/resources/TigersDen/w-pawn.png"));
+            Image blackPawnImage = ImageIO.read(new File("src/main/resources/TigersDen/b-pawn.png"));
+            inisialized = true;
+        } catch (IOException e) {
+            System.err.println("Error: Could not load sprites");
+            e.printStackTrace();
+        }
 
-
-        whitePawn = new ImageIcon(scaledWhitePawnImage);
-        whitePawn = new ImageIcon(scaledBlackPawnImage);
-        inisialized = true;
     }
 
 }

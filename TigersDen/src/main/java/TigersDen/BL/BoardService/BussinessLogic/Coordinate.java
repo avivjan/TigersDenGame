@@ -6,7 +6,7 @@ public class Coordinate implements ICoordinate {
     private int row;
     private int column;
     private boolean isSpacial;
-    private static int cellSize = 48;
+    private static int cellSize = 100;
     private static int numOfRows = 9;;// TODO: handle hard coded values
     private static int numOfCols = 9;// TODO: handle hard coded values
 
@@ -76,12 +76,12 @@ public class Coordinate implements ICoordinate {
 
     @Override
     public int getXInPixels() {
-        return (row + 1) * cellSize;
+        return column * cellSize;
     }
 
     @Override
     public int getYInPixels() {
-        return column * cellSize;
+        return (row + 1) * cellSize;
     }
 
     public static void SetNumOfRows(int numOfRows) {

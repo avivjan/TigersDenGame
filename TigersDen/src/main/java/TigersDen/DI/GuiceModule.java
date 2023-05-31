@@ -1,10 +1,6 @@
 package TigersDen.DI;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import TigersDen.BL.BoardService.BussinessLogic.Board;
@@ -13,7 +9,6 @@ import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.EventHanlderService.BussinessLogic.EventHandlerService;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
-import TigersDen.BL.PlayerService.Contract.IPlayer;
 import TigersDen.BL.TurnManager.BussinessLogic.InMemoryTurnManager;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 import TigersDen.DAL.BussinessLogic.BoardData;

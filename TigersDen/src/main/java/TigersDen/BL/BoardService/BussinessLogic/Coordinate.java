@@ -25,9 +25,9 @@ public class Coordinate implements ICoordinate {
             throw new IllegalArgumentException("x and y must be on board");
         }
         if (inPixels) {
-            int row = y / cellSize;
+            int row = (y / cellSize)-1;
             int column = x / cellSize;
-            return new Coordinate(column, row, false);
+            return new Coordinate(row, column, false);
 
         } else {
             return new Coordinate(x, y, false);
@@ -113,7 +113,7 @@ public class Coordinate implements ICoordinate {
 
     public static boolean isOnBoard(int x, int y, boolean inPixels) {
         if (inPixels) {
-            return x >= 0 && x < numOfCols * cellSize && y >= 0 && y < numOfRows * cellSize;
+            return x >= 0 && x < numOfCols * cellSize && y >= 0 && y < (numOfRows+1) * cellSize;
         }
         return x >= 0 && x < numOfCols && y >= 0 && y < numOfRows;
     }

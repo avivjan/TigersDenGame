@@ -51,5 +51,5 @@ public class PAppletWrapper implements IPAppletWrapper {
     public void image(PImage image, float x, float y, float width, float height) {
         applet.image(image, x, y, width, height);
     }
-    
+
 }

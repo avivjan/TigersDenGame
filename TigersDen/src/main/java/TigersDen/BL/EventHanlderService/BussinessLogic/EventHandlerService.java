@@ -8,6 +8,7 @@ import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
+import TigersDen.DI.InjectorStorage;
 import processing.event.MouseEvent;
 
 public class EventHandlerService implements IEventHandlerService {
@@ -24,7 +25,10 @@ public class EventHandlerService implements IEventHandlerService {
     @Override
     public void handleClick(MouseEvent event) {
         try {
+            IBoard board = InjectorStorage.getInjector().getInstance(IBoard.class);
             ICoordinate cor = Coordinate.createInstance(event.getX(), event.getY(), true);
+            System.out.println("(" + event.getX()+ ", " + event.getY() + ")");
+            System.out.println(cor);
             ICell cellClicked = board.getCell(cor);
             turnManager.getPlayerInTurn().play(cellClicked);
             turnManager.setNextPlayerInTurn();

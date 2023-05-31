@@ -12,14 +12,12 @@ import TigersDen.BL.PlayerService.BussinesLogic.HumanPlayer;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 
 public class ObjectCreator implements IObjectCreator {
-    private final int SPRITESIZE = 480;// TODO: move to config/DAL
     public int cellSize = 100;// TODO: move to config/DAL
     public int numOfRows = 9;// TODO: move to config/DAL
     public int numOfCols = 9;// TODO: move to config/DAL
-    public int windowLabel = 30;
 
     public int WIDTH = cellSize * numOfCols;
-    public int HEIGHT = cellSize * (numOfRows + 1) + windowLabel;
+    public int HEIGHT = cellSize * (numOfRows + 1);
 
     private IBoard board;
     private ITurnManager turnManager;

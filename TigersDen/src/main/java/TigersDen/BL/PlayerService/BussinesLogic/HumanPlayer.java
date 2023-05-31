@@ -1,6 +1,7 @@
 package TigersDen.BL.PlayerService.BussinesLogic;
 
 import TigersDen.BL.BoardService.Contract.IBoard;
+import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.DataModel.CellStatus;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.DI.InjectorStorage;
@@ -30,14 +31,14 @@ public class HumanPlayer extends AbstractPlayer{
                     cellClicked.setPieceOnIt(null);
                 }
                 //move
-                // ICell moveFrom =  board.getSelectedCell();
-                // ICell moveTo = cellClicked;
-                // IPiece pieceToMove = moveFrom.getPieceOnIt();
+                ICell moveFrom =  board.getSelectedCell();
+                ICell moveTo = cellClicked;
+                IPiece pieceToMove = moveFrom.getPieceOnIt();
 
-                // pieceToMove.startMoving(moveTo);
-                // board.DeselectCellIfExists();
-                // moveFrom.setPieceOnIt(null);
-                // moveTo.setPieceOnIt(pieceToMove);
+                pieceToMove.startMoving(moveTo);
+                board.DeselectCellIfExists();
+                moveFrom.setPieceOnIt(null);
+                moveTo.setPieceOnIt(pieceToMove);
             }
             if (!cellClicked.canBeSelected()) {
                 System.out.println("Cell cannot be selected");

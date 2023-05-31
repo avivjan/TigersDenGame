@@ -1,20 +1,9 @@
 package TigersDen.UI.DrawingService.BussinessLogic;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.List;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-
-import org.checkerframework.checker.units.qual.C;
 
 import com.google.inject.Inject;
 
-import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;

@@ -2,8 +2,6 @@ package TigersDen.DAL.Contract;
 
 import java.util.List;
 
-import javax.swing.JButton;
-
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;

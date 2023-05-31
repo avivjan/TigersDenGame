@@ -55,11 +55,6 @@ public class Cell implements ICell{
     public void setPieceOnIt(IPiece piece) {
         this.pieceOnIt = piece;
     }
-
-    @Override
-    public int getCellSizeInPixels() {
-        return 100; // TODO: get from config
-    }
     
     
 }

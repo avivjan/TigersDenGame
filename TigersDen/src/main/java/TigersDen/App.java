@@ -3,13 +3,14 @@ package TigersDen;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import processing.core.PApplet;
+import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
 import TigersDen.DAL.Contract.IBoardData;
 import TigersDen.DI.GuiceModule;
 import TigersDen.DI.InjectorStorage;
 import TigersDen.UI.DrawingService.Contract.IDrawingService;
+import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public class App extends PApplet {
@@ -39,24 +40,17 @@ public class App extends PApplet {
     @Override
     public void setup() {
 
-      
-            frameRate(FPS);
-            Injector injector = Guice.createInjector(new GuiceModule(this));
-            InjectorStorage.setInjector(injector);
-            this.drawingService = injector.getInstance(IDrawingService.class);
-            this.objectCreator = injector.getInstance(IObjectCreator.class);
-            this.clickEventHandler = injector.getInstance(IEventHandlerService.class);
-            IBoardData boardData = injector.getInstance(IBoardData.class);
+        frameRate(FPS);
+        Injector injector = Guice.createInjector(new GuiceModule(this));
+        InjectorStorage.setInjector(injector);
+        this.drawingService = injector.getInstance(IDrawingService.class);
+        this.objectCreator = injector.getInstance(IObjectCreator.class);
+        this.clickEventHandler = injector.getInstance(IEventHandlerService.class);
+        IBoardData bd = injector.getInstance(IBoardData.class);
 
-
-            objectCreator.createBoard();
-            objectCreator.createPieces();
-            // objectsCreator.createPlayers();
-            int turn = 0;
-
-            
-        
-
+        objectCreator.createBoard();
+        objectCreator.createPieces();
+        objectCreator.createPlayers();
     }
 
     /**

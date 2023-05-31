@@ -1,7 +1,6 @@
 package TigersDen.BL.PlayerService.BussinesLogic;
 
 import TigersDen.BL.BoardService.Model.ICell;
-import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public class CpuPlayer extends AbstractPlayer{
     public CpuPlayer(String name, String color) {

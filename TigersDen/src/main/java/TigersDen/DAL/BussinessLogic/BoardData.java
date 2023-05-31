@@ -3,8 +3,6 @@ package TigersDen.DAL.BussinessLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-
 import TigersDen.BL.BoardService.BussinessLogic.Cell;
 import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Contract.ICoordinate;

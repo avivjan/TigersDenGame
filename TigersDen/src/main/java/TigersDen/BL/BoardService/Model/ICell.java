@@ -12,6 +12,5 @@ public interface ICell {
     void setPieceOnIt(IPiece piece);
     ICoordinate getCoordinate();
     void setStatus(CellStatus cs);
-    int getCellSizeInPixels();  
 }
 

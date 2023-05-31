@@ -2,8 +2,6 @@ package TigersDen.BL.BoardService.BussinessLogic;
 
 import java.util.List;
 
-import javax.swing.JButton;
-
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardService.Contract.IBoard;
@@ -22,6 +20,7 @@ public class Board implements IBoard {
         boardData.getCellSizeInPixels();
         Coordinate.SetNumOfRows(boardData.getNumOfRows());
         Coordinate.SetNumOfCols(boardData.getNumOfCols());
+        System.out.println("Board");
     }
 
     @Override
@@ -76,7 +75,7 @@ public class Board implements IBoard {
             DeselectCellIfExists();
             cell.setStatus(CellStatus.Selected);
             setSelectedCell(cell);
-            for (ICell optionalCell : cell.getPieceOnIt().getOptionalMovements()) {
+            for (ICell optionalCell : cell.getPieceOnIt().getOptionalMovements(this)) {
                 if (optionalCell.getPieceOnIt() != null && optionalCell.getPieceOnIt().getOwningPlayer() != this ) {
                     optionalCell.setStatus(CellStatus.OptionWithCapture);
                     System.out.println("Cell " + optionalCell.getCoordinate() + " is an option with capture");

@@ -6,8 +6,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.google.inject.Inject;
+
 import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
 import TigersDen.BL.BoardService.Contract.IPiece;
+import TigersDen.UI.DrawingService.Contract.IPAppletWrapper;
 import TigersDen.UI.DrawingService.Contract.ISpriteManager;
 import processing.core.PImage;
 
@@ -15,6 +18,12 @@ public class SpriteManager implements ISpriteManager {
     private PImage whitePawn;
     private PImage blackPawn;
     private boolean inisialized = false;
+    private IPAppletWrapper pAppletWrapper;
+
+    @Inject
+    public SpriteManager(IPAppletWrapper  pAppletWrapper) {
+        this.pAppletWrapper = pAppletWrapper;
+    }
 
     @Override
     public PImage getSprite(IPiece piece, String color) {
@@ -36,14 +45,12 @@ public class SpriteManager implements ISpriteManager {
     private void inisialize()  {
 
         try {
-            Image whitePawnImage = ImageIO.read(new File("src/main/resources/TigersDen/w-pawn.png"));
-            Image blackPawnImage = ImageIO.read(new File("src/main/resources/TigersDen/b-pawn.png"));
+            whitePawn = pAppletWrapper.loadImage("src/main/resources/TigersDen/w-pawn.png");
+            blackPawn = pAppletWrapper.loadImage("src/main/resources/TigersDen/b-pawn.png");
             inisialized = true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Error: Could not load sprites");
             e.printStackTrace();
         }
-
     }
-
 }

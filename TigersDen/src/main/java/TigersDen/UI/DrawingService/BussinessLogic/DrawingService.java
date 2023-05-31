@@ -43,7 +43,7 @@ public class DrawingService implements IDrawingService {
         pAppletWrapper.fill(250);
         pAppletWrapper.textSize(25);
         drawCells();
-        //drawPieces();
+        drawPieces();
 
     }
 
@@ -54,17 +54,15 @@ public class DrawingService implements IDrawingService {
                 continue;
             }
             PImage sprite = spriteManager.getSprite(piece, piece.getOwningPlayer().getColor());
+            if (sprite == null) {
+                System.out.println("Error: Sprite is null for piece: " + piece.getClass().getSimpleName());
+            }
             ICoordinate coordinate = piece.getCoordinate();
 
             int pixelX = coordinate.getXInPixels();
             int pixelY = coordinate.getYInPixels();
             // Draw the image
-            if (sprite != null) {
-                pAppletWrapper.image(sprite, pixelX, pixelY, 100, 100);//Get From config
-            } else {
-                System.out.println("Error: Sprite is null for piece: " + piece.getClass().getSimpleName());
-            }
-
+            pAppletWrapper.image(sprite, pixelX, pixelY, 100, 100);//Get From config
         }
     }
 

@@ -18,7 +18,6 @@ public class HumanPlayer extends AbstractPlayer{
         try {
             CellStatus cellStatus = cellClicked.getStatus();
             
-
             if (cellStatus == CellStatus.Selected) {
                 board.DeselectCellIfExists();
                 return;
@@ -39,6 +38,7 @@ public class HumanPlayer extends AbstractPlayer{
                 board.DeselectCellIfExists();
                 moveFrom.setPieceOnIt(null);
                 moveTo.setPieceOnIt(pieceToMove);
+                return;
             }
             if (!cellClicked.canBeSelected()) {
                 System.out.println("Cell cannot be selected");

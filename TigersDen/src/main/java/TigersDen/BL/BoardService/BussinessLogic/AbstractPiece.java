@@ -11,12 +11,13 @@ import TigersDen.BL.MovementService.DataModel.MovingDetails;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public abstract class AbstractPiece implements IPiece {
-    private ICoordinate coordinate;
     private boolean isCaptured;
     private IPlayer owningPlayer;
-    protected IMovementService movingService;
+    protected ICoordinate coordinate;
+    protected IMovementService movementService;
 
-    public AbstractPiece(ICoordinate coordinate2,  IPlayer owningPlayer){
+    public AbstractPiece(ICoordinate coordinate2,  IPlayer owningPlayer, IMovementService ms){
+        this.movementService = ms;
         this.coordinate = coordinate2;
         this.owningPlayer = owningPlayer;
     }
@@ -26,7 +27,7 @@ public abstract class AbstractPiece implements IPiece {
 
     @Override
     public void startMoving(ICell cell) throws Exception {
-        movingService.AddMovingDetails(new MovingDetails(this, cell));
+        movementService.AddMovingDetails(new MovingDetails(this, cell));
         
         if (this.coordinate.equals(cell.getCoordinate())) {
             throw new Exception("The piece is already in the target cell.");

@@ -1,68 +1,81 @@
 package TigersDen.BL.ConfigurationService.BussinessLogic;
 
-import java.io.File;
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
-import TigersDen.BL.PlayerService.DataModel.PlayerDetails;
-import processing.core.PApplet;
-import processing.data.JSONObject;
+import TigersDen.BL.ConfigurationService.DataModel.ConfigurationData;
+import TigersDen.BL.ConfigurationService.DataModel.PlayerDetails;
 
 public class JsonConfigurationService implements IConfigurationService {
-    private JSONObject jsonConfig;
+    private final String jsonFilePath = "src/main/resources/config.json";
+    private ConfigurationData configurationData;
 
+    public JsonConfigurationService() throws IOException {
+        try {
+            String jsonString = readJsonFile(jsonFilePath);
+            Gson gson = new GsonBuilder().create();
+            this.configurationData = gson.fromJson(jsonString, ConfigurationData.class);
 
-    @Override
-    public void init(String configPath) {
-        jsonConfig = PApplet.loadJSONObject(new File(configPath));
+        } catch (JsonSyntaxException e) {
+            throw new IOException("Invalid JSON format", e);
+        }
+    }
+
+    private String readJsonFile(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        return new String(Files.readAllBytes(path));
     }
 
     @Override
     public String getAssetsPath() {
-        return (String)jsonConfig.get("AssetsPath");
+        return configurationData.getAssetsPath();
     }
 
     @Override
     public int getCellSize() {
-        return (int)jsonConfig.get("CellSize");
+        return configurationData.getCellSize();
     }
 
     @Override
     public int getScreenHeight() {
-        return (int)jsonConfig.get("ScreenHeight");
+        return configurationData.getScreenHeight();
     }
 
     @Override
     public int getScreenWidth() {
-        return (int)jsonConfig.get("ScreenWidth");
+        return configurationData.getScreenWidth();
     }
 
     @Override
     public int getAssetsSize() {
-        return (int)jsonConfig.get("AssetsSize");
+        return configurationData.getAssetsSize();
     }
 
     @Override
     public int getNumOfRows() {
-        return (int)jsonConfig.get("NumOfRows");
+        return configurationData.getNumOfRows();
     }
 
     @Override
     public int getNumOfCols() {
-        return (int)jsonConfig.get("NumOfCols");
-    }
-
-    @Override
-    public float GetPieceMovementSpeed() {
-        return (int)jsonConfig.get("PieceMovementSpeed");
+        return configurationData.getNumOfCols();
     }
 
     @Override
     public List<PlayerDetails> getPlayersDetails() {
-        return new ArrayList<>();
+        return configurationData.getPlayersDetails();
     }
 
-    
-
+    @Override
+    public float GetPieceMovementSpeed() {
+        return configurationData.getPieceMovementSpeed();
+    }
 }

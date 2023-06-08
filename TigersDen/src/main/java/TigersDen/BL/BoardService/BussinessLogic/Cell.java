@@ -10,14 +10,12 @@ import TigersDen.BL.PlayerService.BussinesLogic.HumanPlayer;
 
 public class Cell implements ICell{
     private CellStatus status;
-    private boolean selected;
     private IPiece pieceOnIt;
     private ICoordinate coordinate;
 
     
     public Cell(CellStatus status, boolean selected, ICoordinate coordinate, IPiece pieceOnIt) {
         this.status = status;
-        this.selected = selected;
         this.pieceOnIt = pieceOnIt;
         this.coordinate = coordinate;
     }
@@ -25,10 +23,6 @@ public class Cell implements ICell{
     @Override
     public CellStatus getStatus() {
         return status;
-    }
-
-    public boolean isSelected() {
-        return selected;
     }
 
     public boolean canBeSelected() 
@@ -54,6 +48,10 @@ public class Cell implements ICell{
     @Override
     public void setPieceOnIt(IPiece piece) {
         this.pieceOnIt = piece;
+    }
+    @Override
+    public boolean isEmpty() {
+        return pieceOnIt == null;
     }
     
     

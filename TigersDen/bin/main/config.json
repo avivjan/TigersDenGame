@@ -1,0 +1,19 @@
+{
+    "assetsPath": "/resources!",
+    "cellSize": 100,
+    "screenHeight": 1000,
+    "screenWidth": 900,
+    "assetsSize": 100,
+    "numOfRows": 9,
+    "numOfCols": 9,
+    "playersDetails": [
+      {
+        "name": "Player 1"
+      },
+      {
+        "name": "Player 2"
+      }
+    ],
+    "pieceMovementSpeed": 1.5
+  }
+  

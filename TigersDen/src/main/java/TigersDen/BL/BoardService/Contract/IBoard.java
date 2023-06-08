@@ -9,9 +9,6 @@ public interface IBoard {
 
     ICell getTigerDenCell();
 
-    // float getMaxMoveDuration(); TODO: move to config
-    // float getMovingSpeed(); TODO: move to config
-
     ICell getSelectedCell();
 
     void setSelectedCell(ICell cell);

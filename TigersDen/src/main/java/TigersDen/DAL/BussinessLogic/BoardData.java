@@ -9,7 +9,9 @@ import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.DataModel.CellStatus;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.DAL.Contract.IBoardData;
+import TigersDen.DI.InjectorStorage;
 
 public class BoardData implements IBoardData {
 
@@ -21,20 +23,28 @@ public class BoardData implements IBoardData {
     private int numOfCols;
     private int numOfRows;
     private List<ICell> optionCells;
+    private boolean initialized = false;
 
-    public BoardData(int numOfCols, int numOfrows, int cellSize) {
+    public BoardData() {
         selectedCell = null;
-        this.numOfCols = numOfCols;
-        this.numOfRows = numOfrows;
-        this.cellSizeInPixels = cellSize;
-        board = new ICell[numOfrows][numOfCols];
+
         this.pieces = new ArrayList<IPiece>();
         optionCells = new ArrayList<ICell>();
+    }
+
+    private void init() {
+        IConfigurationService cs = InjectorStorage.getInjector().getInstance(IConfigurationService.class);
+        this.numOfCols = cs.getNumOfCols();;
+        this.numOfRows = cs.getNumOfRows();;
+        this.cellSizeInPixels = cs.getCellSize();
+        board = new ICell[numOfRows][numOfCols];
         createBoardCells();
+        initialized = true;
     }
 
     @Override
     public ICell getCell(ICoordinate coordinate) throws IllegalArgumentException {
+        if (!initialized) {init();}
         if (coordinate.isSpacial())
             return tigerDen;
         int row = coordinate.getRow();
@@ -42,31 +52,36 @@ public class BoardData implements IBoardData {
         if (isValidCoordinate(row, col)) {
             return board[row][col];
         }
-        throw new IllegalArgumentException("Invalid coordinate");
+        return null;
     }
 
     @Override
     public ICell getSelectedCell() {
+        if (!initialized) {init();}
         return selectedCell;
     }
 
     @Override
     public void setSelectedCell(ICell cell) {
+        if (!initialized) {init();}
         selectedCell = cell;
     }
 
     @Override
     public void selectCell(ICell cell) {
+        if (!initialized) {init();}
         selectedCell = cell;
     }
 
     @Override
     public void DeselectCellIfExists() {
+        if (!initialized) {init();}
         selectedCell = null;
     }
 
     @Override
     public void addPiece(IPiece piece) {
+        if (!initialized) {init();}
         ICoordinate coordinate = piece.getCoordinate();
         pieces.add(piece);
         if (coordinate.isSpacial()) {
@@ -78,6 +93,7 @@ public class BoardData implements IBoardData {
 
     @Override
     public void addCell(ICell cell) {
+        if (!initialized) {init();}
         ICoordinate coordinate = cell.getCoordinate();
         if(coordinate.isSpacial())
         {
@@ -89,36 +105,44 @@ public class BoardData implements IBoardData {
 
     @Override
     public ICell getTigerDenCell() {
+        if (!initialized) {init();}
         return tigerDen;
     }
 
-    private boolean isValidCoordinate(int row, int col) { // ToDO: move to BL
+    private boolean isValidCoordinate(int row, int col) {// ToDO: move to BL
+        if (!initialized) {init();} 
         return row >= 0 && row < board.length && col >= 0 && col < board[row].length;
     }
 
     public int getCellSizeInPixels() {
+        if (!initialized) {init();} 
         return cellSizeInPixels;
     }
 
     public int getNumOfCols() {
+        if (!initialized) {init();} 
         return numOfCols;
     }
 
     public int getNumOfRows() {
+        if (!initialized) {init();} 
         return numOfRows;
     }
 
     public List<IPiece> getPieces() {
+        if (!initialized) {init();} 
         return pieces;
     }
 
     @Override
     public List<ICell> getOptionalCells() {
+        if (!initialized) {init();} 
         return optionCells;
     }
 
     @Override
     public void addOptionCells(ICell optionCell) {
+        if (!initialized) {init();} 
         optionCells.add(optionCell);
     }
 

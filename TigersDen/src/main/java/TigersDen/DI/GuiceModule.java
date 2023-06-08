@@ -7,8 +7,12 @@ import TigersDen.BL.BoardService.BussinessLogic.Board;
 import TigersDen.BL.BoardService.BussinessLogic.ObjectCreator;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
+import TigersDen.BL.ConfigurationService.BussinessLogic.JsonConfigurationService;
+import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.BL.EventHanlderService.BussinessLogic.EventHandlerService;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
+import TigersDen.BL.MovementService.BussinessLogic.MovementService;
+import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.BL.TurnManager.BussinessLogic.InMemoryTurnManager;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 import TigersDen.DAL.BussinessLogic.BoardData;
@@ -40,8 +44,9 @@ public class GuiceModule extends AbstractModule {
         bind(IEventHandlerService.class).to(EventHandlerService.class).in(Singleton.class);
         bind(PApplet.class).toInstance(applet);
         bind(IPAppletWrapper.class).to(PAppletWrapper.class);
-
-        bind(IBoardData.class).toInstance(new BoardData(9,9, 100));//TODO: move to config/DAL?
+        bind(IConfigurationService.class).to(JsonConfigurationService.class).in(Singleton.class);
+        bind(IMovementService.class).to(MovementService.class).in(Singleton.class);
+        bind(IBoardData.class).to(BoardData.class).in(Singleton.class);
         
     }
     

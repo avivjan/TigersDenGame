@@ -1,7 +1,5 @@
 package TigersDen.BL.MovementService.BussinessLogic;
 
-import java.util.List;
-
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
@@ -22,6 +20,7 @@ public class MovementService implements IMovementService{
 
     @Override
     public void move() throws Exception {
+        System.out.println("move");
         if (movingDetails == null ) {
             return;
         }
@@ -73,8 +72,8 @@ public class MovementService implements IMovementService{
             System.out.println("MovementService: Piece" + movingPiece.getClass() 
                                 + "has just reached his destination");
             movingPiece.setCoordinate(targetCell.getCoordinate());
-            movingDetails = null;
             board.DeselectCellIfExists();
+            movingDetails = null;
         }
     }
 
@@ -86,12 +85,12 @@ public class MovementService implements IMovementService{
     }
 
     @Override
-    public void AddMovingDetails(MovingDetails movingDetails) throws Exception {
+    public void AddMovingDetails(MovingDetails movingDetails2) throws Exception {
         if (isMoving())
         {
             throw new Exception("Currently this is not possible to move two pieces at the same time");
         }
-        this.movingDetails = movingDetails;
+        this.movingDetails = movingDetails2;
     }
 
     @Override

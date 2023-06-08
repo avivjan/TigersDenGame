@@ -3,9 +3,9 @@ package TigersDen;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
+import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.DAL.Contract.IBoardData;
 import TigersDen.DI.GuiceModule;
 import TigersDen.DI.InjectorStorage;
@@ -28,6 +28,8 @@ public class App extends PApplet {
     private IDrawingService drawingService;
     private IObjectCreator objectCreator;
     private IEventHandlerService clickEventHandler;
+    private IMovementService movementService;
+    IBoardData boardData;
 
     public App() {
         this.configPath = "config.json";
@@ -39,18 +41,21 @@ public class App extends PApplet {
 
     @Override
     public void setup() {
+        try {
+            frameRate(FPS);
+            Injector injector = Guice.createInjector(new GuiceModule(this));
+            InjectorStorage.setInjector(injector);
+            this.drawingService = injector.getInstance(IDrawingService.class);
+            this.objectCreator = injector.getInstance(IObjectCreator.class);
+            this.clickEventHandler = injector.getInstance(IEventHandlerService.class);
+            this.movementService = injector.getInstance(IMovementService.class);
+            this.boardData = injector.getInstance(IBoardData.class);
 
-        frameRate(FPS);
-        Injector injector = Guice.createInjector(new GuiceModule(this));
-        InjectorStorage.setInjector(injector);
-        this.drawingService = injector.getInstance(IDrawingService.class);
-        this.objectCreator = injector.getInstance(IObjectCreator.class);
-        this.clickEventHandler = injector.getInstance(IEventHandlerService.class);
-        IBoardData bd = injector.getInstance(IBoardData.class);
-
-        objectCreator.createBoard();
-        objectCreator.createPieces();
-        objectCreator.createPlayers();
+            objectCreator.createPieces();
+            objectCreator.createPlayers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -59,10 +64,13 @@ public class App extends PApplet {
     public void draw() {
         try {
             drawingService.draw();
-            // if(movingService.isMoving())
-            // {
-            // movingService.move();
-            // }
+            
+            if(movementService.isMoving())
+            {
+                System.out.println("is moving");
+                movementService.move();
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

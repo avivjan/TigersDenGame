@@ -9,6 +9,7 @@ import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.DataModel.CellStatus;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.UI.DrawingService.Contract.IDrawingService;
 import TigersDen.UI.DrawingService.Contract.IPAppletWrapper;
 import TigersDen.UI.DrawingService.Contract.ISpriteManager;
@@ -18,12 +19,15 @@ public class DrawingService implements IDrawingService {
     private IPAppletWrapper pAppletWrapper;
     private IBoard board;
     private ISpriteManager spriteManager;
+    private IConfigurationService configurationService;
 
     @Inject
-    public DrawingService(IPAppletWrapper appletWrapper, IBoard board, ISpriteManager spriteManager) {
+    public DrawingService(IPAppletWrapper appletWrapper, IBoard board,
+                        ISpriteManager spriteManager , IConfigurationService configurationService) {
         this.pAppletWrapper = appletWrapper;
         this.board = board;
         this.spriteManager = spriteManager;
+        this.configurationService = configurationService; 
     }
 
     @Override
@@ -51,16 +55,20 @@ public class DrawingService implements IDrawingService {
             int pixelX = coordinate.getXInPixels();
             int pixelY = coordinate.getYInPixels();
             // Draw the image
-            pAppletWrapper.image(sprite, pixelX, pixelY, 100, 100);//Get From config
+            pAppletWrapper.image(sprite,pixelX , pixelY, configurationService.getAssetsSize(), configurationService.getAssetsSize());//Get From config
         }
     }
 
     private void drawCells() throws Exception {
+        System.out.println(board.getCells().size());
         for (ICell cell : board.getCells()) {
-            int cellSize = 100; //TODO: Get from config
+            int cellSize = configurationService.getCellSize();
             
             decideAColor(cell.getCoordinate());
-            pAppletWrapper.rect(cell.getCoordinate().getXInPixels(), cell.getCoordinate().getYInPixels(), cellSize, cellSize);
+            pAppletWrapper.rect(cell.getCoordinate().getXInPixels(),
+                                cell.getCoordinate().getYInPixels(),
+                                cellSize,
+                                cellSize);
         }
     }
 

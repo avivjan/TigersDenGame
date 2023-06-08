@@ -4,7 +4,7 @@ import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 
 public class MovingDetails {
-    private double pieceMovementSpeed;
+    private double pieceMovementSpeed = 10;//config
     private IPiece movingPiece;
     private ICell targetCell;
 

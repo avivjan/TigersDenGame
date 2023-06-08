@@ -13,14 +13,13 @@ import TigersDen.DAL.Contract.IBoardData;
 
 public class Board implements IBoard {
     private IBoardData boardData;
-    
+
     @Inject
     public Board(IBoardData boardData) {
         this.boardData = boardData;
         boardData.getCellSizeInPixels();
         Coordinate.SetNumOfRows(boardData.getNumOfRows());
         Coordinate.SetNumOfCols(boardData.getNumOfCols());
-        System.out.println("Board");
     }
 
     @Override
@@ -37,6 +36,7 @@ public class Board implements IBoard {
     public void setSelectedCell(ICell cell) {
         boardData.setSelectedCell(cell);
     }
+
     @Override
     public int getNumOfCols() {
         return boardData.getNumOfCols();
@@ -47,7 +47,6 @@ public class Board implements IBoard {
         return boardData.getNumOfRows();
     }
 
-
     @Override
     public void DeselectCellIfExists() {
         try {
@@ -55,15 +54,14 @@ public class Board implements IBoard {
             if (selectedCell == null) {
                 return;
             }
-            for (ICell optional : boardData.getOptionalCells())
-            {
+            for (ICell optional : boardData.getOptionalCells()) {
                 optional.setStatus(CellStatus.None);
             }
-            if (selectedCell != null) {
-                selectedCell.setStatus(CellStatus.None);
-                setSelectedCell(null);
-                System.out.println("Cell " + selectedCell.getCoordinate() + " deselected");
-            }
+
+            selectedCell.setStatus(CellStatus.None);
+            setSelectedCell(null);
+            System.out.println("Cell " + selectedCell.getCoordinate() + " deselected");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,12 +74,13 @@ public class Board implements IBoard {
             cell.setStatus(CellStatus.Selected);
             setSelectedCell(cell);
             for (ICell optionalCell : cell.getPieceOnIt().getOptionalMovements(this)) {
-                if (optionalCell.getPieceOnIt() != null && optionalCell.getPieceOnIt().getOwningPlayer() != this ) {
+                if (optionalCell.getPieceOnIt() != null && optionalCell.getPieceOnIt().getOwningPlayer() != this) {
                     optionalCell.setStatus(CellStatus.OptionWithCapture);
                     System.out.println("Cell " + optionalCell.getCoordinate() + " is an option with capture");
                     continue;
                 }
                 optionalCell.setStatus(CellStatus.Option);
+                boardData.addOptionCells(optionalCell);
                 System.out.println("Cell " + optionalCell.getCoordinate() + " is an option");
             }
 
@@ -95,6 +94,7 @@ public class Board implements IBoard {
     public void addOptionCells(ICell optionCell) {
         boardData.addOptionCells(optionCell);
     }
+
     @Override
     public void addCell(ICell cell) {
         boardData.addCell(cell);
@@ -104,7 +104,6 @@ public class Board implements IBoard {
     public ICell getTigerDenCell() {
         return boardData.getTigerDenCell();
     }
-
 
     @Override
     public void addPiece(IPiece piece) throws Exception {

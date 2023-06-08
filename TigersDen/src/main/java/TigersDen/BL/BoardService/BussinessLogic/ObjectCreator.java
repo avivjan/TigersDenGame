@@ -3,29 +3,31 @@ package TigersDen.BL.BoardService.BussinessLogic;
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
+// import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.DataModel.CellStatus;
+import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.BL.PlayerService.BussinesLogic.HumanPlayer;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 
 public class ObjectCreator implements IObjectCreator {
-    public int cellSize = 100;// TODO: move to config/DAL
-    public int numOfRows = 9;// TODO: move to config/DAL
-    public int numOfCols = 9;// TODO: move to config/DAL
-
-    public int WIDTH = cellSize * numOfCols;
-    public int HEIGHT = cellSize * (numOfRows + 1);
+    private int numOfRows;
+    private int numOfCols;
 
     private IBoard board;
     private ITurnManager turnManager;
+    private IConfigurationService configService;
 
     @Inject
-    public ObjectCreator(IBoard board, ITurnManager turnManager) {
+    public ObjectCreator(IBoard board, ITurnManager turnManager, IConfigurationService configService) {
         this.board = board;
         this.turnManager = turnManager;
+        this.configService = configService;
+        this.numOfRows = configService.getNumOfRows();
+        this.numOfCols = configService.getNumOfCols();
     }
 
     @Override
@@ -35,15 +37,6 @@ public class ObjectCreator implements IObjectCreator {
         // TODO  a config file, creates players and add them to turn manager !!!!!!!!
     
         turnManager.addPlayer(new HumanPlayer("Player1", "white"));
-    }
-    @Override
-    public void createBoard() {
-        for (int row = 0; row < numOfRows; row++) {
-            for (int col = 0; col < numOfCols; col++) {
-                board.addCell(new Cell(CellStatus.None, false, Coordinate.createInstance(row, col, false), null));
-            }
-        }
-        board.addCell(new Cell(CellStatus.None, false, Coordinate.createSpacialInstance(), null));
     }
 
 
@@ -57,8 +50,8 @@ public class ObjectCreator implements IObjectCreator {
             for (int row = numOfRows - 2; row < numOfRows; row++) {
                 for (int column = 0; column < numOfCols; column++) {
                     ICoordinate tempCor = Coordinate.createInstance(row, column, false);
-                    piece = new PawnPiece(tempCor, new HumanPlayer("Player1", "white"));//Change Player!
-                    board.addPiece(piece);
+                    IPiece tmpPiece = new PawnPiece(tempCor, new HumanPlayer("Player1", "white"));//Change Player!
+                    board.addPiece(tmpPiece);
                 }
             }
         } catch (Exception e) {

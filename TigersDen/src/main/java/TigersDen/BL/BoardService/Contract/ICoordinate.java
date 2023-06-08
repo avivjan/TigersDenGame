@@ -9,4 +9,5 @@ public interface ICoordinate {
     double getDistanceTo(ICoordinate coordinate);
     void setSpacial(boolean isSpacial);
     boolean isSpacial();
+    boolean isOnBoard();
 }

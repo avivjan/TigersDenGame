@@ -77,7 +77,7 @@ public class App extends PApplet {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e){
         clickEventHandler.handleClick(e);
     }
 

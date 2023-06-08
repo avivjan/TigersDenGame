@@ -21,5 +21,5 @@ public interface IConfigurationService {
 
     List<PlayerDetails> getPlayersDetails();
 
-    float GetPieceMovementSpeed();
+    int GetPieceMovementSpeed();
 }

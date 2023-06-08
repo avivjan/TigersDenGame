@@ -75,7 +75,7 @@ public class JsonConfigurationService implements IConfigurationService {
     }
 
     @Override
-    public float GetPieceMovementSpeed() {
+    public int GetPieceMovementSpeed() {
         return configurationData.getPieceMovementSpeed();
     }
 }

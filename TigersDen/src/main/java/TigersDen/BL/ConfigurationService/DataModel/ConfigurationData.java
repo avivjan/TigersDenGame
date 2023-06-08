@@ -11,7 +11,7 @@ public class ConfigurationData {
     private int numOfRows;
     private int numOfCols;
     private List<PlayerDetails> playersDetails;
-    private float pieceMovementSpeed;
+    private int pieceMovementSpeed;
 
     public String getAssetsPath() {
         return assetsPath;
@@ -45,7 +45,7 @@ public class ConfigurationData {
         return playersDetails;
     }
 
-    public float getPieceMovementSpeed() {
+    public int getPieceMovementSpeed() {
         return pieceMovementSpeed;
     }
     

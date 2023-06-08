@@ -50,7 +50,7 @@ public class Coordinate implements ICoordinate {
             if (isSpacialCoordinateByPixels(x, y)) {
                 return createSpacialInstance();
             }
-            return new Coordinate(x, y-100, false);
+            return new Coordinate(x, y, false);
 
         } else {
             int row = x;//Naming purposes
@@ -68,7 +68,7 @@ public class Coordinate implements ICoordinate {
         if (this.isSpacial) {
             return getRowForSpecialCell();
         }
-        return (y-1) / cellSize;
+        return (y / cellSize) - 1;
     }
 
     @Override
@@ -140,6 +140,12 @@ public class Coordinate implements ICoordinate {
             return isSpacialCoordinateByRowAndCol(x, y);
         }
     }
+
+    @Override
+    public boolean isOnBoard() {
+        return isOnBoard(x, y, true);
+    }
+    
 
     public static  boolean isSpacialCoordinateByPixels(int x, int y) {
         return x == getXInPixelForSpecialCell() && y == getYInPixelForSpecialCell();

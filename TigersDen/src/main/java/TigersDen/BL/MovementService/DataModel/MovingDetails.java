@@ -1,23 +1,27 @@
 package TigersDen.BL.MovementService.DataModel;
 
+import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
+import TigersDen.DI.InjectorStorage;
 
 public class MovingDetails {
-    private double pieceMovementSpeed = 10;//config
+    private int pieceMovementSpeed;
     private IPiece movingPiece;
     private ICell targetCell;
 
     public MovingDetails(IPiece piece, ICell target) {
         this.movingPiece = piece;
         this.targetCell = target;
+        this.pieceMovementSpeed = InjectorStorage.getInjector().getInstance(IConfigurationService.class).GetPieceMovementSpeed();
     }
 
-    public double getPieceMovementSpeed() {
+    public int getPieceMovementSpeed() {
         return pieceMovementSpeed;
     }
 
-    public void setPieceMovementSpeed(double pieceMovementSpeed) {
+    public void setPieceMovementSpeed(int pieceMovementSpeed) {
         this.pieceMovementSpeed = pieceMovementSpeed;
     }
 
@@ -37,6 +41,15 @@ public class MovingDetails {
     }
 
     public void setTargetCell(ICell targetCell) {
+        if (targetCell == null) {
+            throw new NullPointerException("Target cell is null.");
+        }
+        if (targetCell.getCoordinate() == null) {
+            throw new NullPointerException("Target cell coordinate is null.");
+        }
+        if ((targetCell.getCoordinate().isOnBoard()) == false) {
+            throw new IllegalArgumentException("Target cell coordinate is not on board.");
+        }
         this.targetCell = targetCell;
     }   
 }

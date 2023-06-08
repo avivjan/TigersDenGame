@@ -50,7 +50,7 @@ public class Coordinate implements ICoordinate {
             if (isSpacialCoordinateByPixels(x, y)) {
                 return createSpacialInstance();
             }
-            return new Coordinate(x, y, false);
+            return new Coordinate(x, y-100, false);
 
         } else {
             int row = x;//Naming purposes

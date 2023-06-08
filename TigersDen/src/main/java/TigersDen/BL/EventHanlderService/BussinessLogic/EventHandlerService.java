@@ -28,7 +28,7 @@ public class EventHandlerService implements IEventHandlerService {
     @Override
     public void handleClick(MouseEvent event) {
         try {
-
+            System.out.println("Mouse Clicked" + "(x: "+event.getX() + ", " + event.getY()+")");
             ICoordinate cor = Coordinate.createInstance(event.getX(), event.getY(), true);
             System.out.println("(" + event.getX()+ ", " + event.getY() + ")");
             System.out.println(cor);

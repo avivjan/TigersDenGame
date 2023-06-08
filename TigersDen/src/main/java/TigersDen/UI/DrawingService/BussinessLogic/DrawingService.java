@@ -60,7 +60,6 @@ public class DrawingService implements IDrawingService {
     }
 
     private void drawCells() throws Exception {
-        System.out.println(board.getCells().size());
         for (ICell cell : board.getCells()) {
             int cellSize = configurationService.getCellSize();
             

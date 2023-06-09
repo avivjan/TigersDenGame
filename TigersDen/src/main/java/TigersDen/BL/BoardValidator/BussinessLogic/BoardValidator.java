@@ -28,24 +28,25 @@ public class BoardValidator implements IBoardValidator {
 
     private boolean isPawnsWinner() throws Exception {
         for (IPiece piece : board.getPieces()) {
-            if (piece.getOwningPlayer().getName().equals("tiger"));
+            if (piece.getOwningPlayer().getRole().equals("tiger"));
             {
                 if(piece.getOptionalMovements(board).size() == 0)
                 {
                     return true;
                 }
+                return false;
             }
         }
         throw new Exception("there is no player with the role of tiger");
     }
 
     private boolean isTigerWinner() {
-        int nonCapturedPawnsCount = 0;
+        int alivePawnsCount = 0;
         for (IPiece piece : board.getPieces()) {
-            if (piece.getOwningPlayer().getName().equals("pawns") && !piece.isCaptured()) {
-                nonCapturedPawnsCount++;
+            if (piece.getOwningPlayer().getRole().equals("pawns") && !piece.isCaptured()) {
+                alivePawnsCount++;
             }
         }
-        return nonCapturedPawnsCount == 0;
+        return alivePawnsCount == 0;
     }
 }

@@ -34,7 +34,8 @@ public class InMemoryTurnManager implements ITurnManager {
     @Override
     public void setNextPlayerInTurn() {
         try {
-            if (!boardValidator.getWinnerName().isEmpty()) {
+            String winner = boardValidator.getWinnerName();
+            if (winner != null) {
                 System.out.println("The winner is: " + boardValidator.getWinnerName());
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();

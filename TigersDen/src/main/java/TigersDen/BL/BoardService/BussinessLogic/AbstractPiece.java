@@ -20,6 +20,7 @@ public abstract class AbstractPiece implements IPiece {
         this.movementService = ms;
         this.coordinate = coordinate2;
         this.owningPlayer = owningPlayer;
+        isCaptured = false;
     }
 
     @Override

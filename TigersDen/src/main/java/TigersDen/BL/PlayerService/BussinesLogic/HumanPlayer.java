@@ -8,19 +8,19 @@ import TigersDen.DI.InjectorStorage;
 
 public class HumanPlayer extends AbstractPlayer{
     IBoard board;
-    public HumanPlayer(String name, String color) {
-        super(name, color);
+    public HumanPlayer(String name, String color, String role) {
+        super(name, color, role);
         board = InjectorStorage.getInjector().getInstance(IBoard.class);
     }
 
     @Override
-    public void play(ICell cellClicked) {
+    public boolean play(ICell cellClicked) {
         try {
             CellStatus cellStatus = cellClicked.getStatus();
             
             if (cellStatus == CellStatus.Selected) {
                 board.DeselectCellIfExists();
-                return;
+                return false;
             }
             if (cellStatus == CellStatus.Option || cellStatus == CellStatus.OptionWithCapture) {
                 if (cellStatus == CellStatus.OptionWithCapture)
@@ -38,17 +38,19 @@ public class HumanPlayer extends AbstractPlayer{
                 board.DeselectCellIfExists();
                 moveFrom.setPieceOnIt(null);
                 moveTo.setPieceOnIt(pieceToMove);
-                return;
+                return true;
             }
             if (!cellClicked.canBeSelected()) {
                 System.out.println("Cell cannot be selected");
-                return;
+                return false;
             }
             // Here we know that the cell is not selected, can be selected and is not an
             // option.
             board.selectCell(cellClicked);
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

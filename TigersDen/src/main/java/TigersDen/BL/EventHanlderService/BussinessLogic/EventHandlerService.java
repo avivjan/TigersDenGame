@@ -14,15 +14,12 @@ import processing.event.MouseEvent;
 public class EventHandlerService implements IEventHandlerService {
     private ITurnManager turnManager;
     private IBoard board;
-    private IConfigurationService configurationService;
-
     @Inject
     public EventHandlerService(ITurnManager turnManager, IBoard board,
             IConfigurationService configurationService) {
         super();
         this.turnManager = turnManager;
         this.board = board;
-        this.configurationService = configurationService;
     }
 
     @Override
@@ -37,8 +34,11 @@ public class EventHandlerService implements IEventHandlerService {
                 System.err.println("The cell you pressed is not on the board!");
                 return;
             }
-            turnManager.getPlayerInTurn().play(cellClicked);
-            turnManager.setNextPlayerInTurn();
+            boolean isTurnOver = turnManager.getPlayerInTurn().play(cellClicked);
+            if (isTurnOver)
+            {
+                turnManager.setNextPlayerInTurn();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

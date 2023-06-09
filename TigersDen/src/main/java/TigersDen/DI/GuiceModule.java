@@ -7,6 +7,8 @@ import TigersDen.BL.BoardService.BussinessLogic.Board;
 import TigersDen.BL.BoardService.BussinessLogic.ObjectCreator;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
+import TigersDen.BL.BoardValidator.BussinessLogic.BoardValidator;
+import TigersDen.BL.BoardValidator.Contract.IBoardValidator;
 import TigersDen.BL.ConfigurationService.BussinessLogic.JsonConfigurationService;
 import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.BL.EventHanlderService.BussinessLogic.EventHandlerService;
@@ -47,6 +49,7 @@ public class GuiceModule extends AbstractModule {
         bind(IConfigurationService.class).to(JsonConfigurationService.class).in(Singleton.class);
         bind(IMovementService.class).to(MovementService.class).in(Singleton.class);
         bind(IBoardData.class).to(BoardData.class).in(Singleton.class);
+        bind(IBoardValidator.class).to(BoardValidator.class).in(Singleton.class);
         
     }
     

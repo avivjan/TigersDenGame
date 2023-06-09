@@ -10,4 +10,5 @@ public interface ITurnManager {
     List<IPlayer> getHumanPlayers();
     List<IPlayer> getCPUPlayers();
     void addPlayer(IPlayer player);
+    IPlayer getPlayerByRole(String string);
 }

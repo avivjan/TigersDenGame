@@ -1,6 +1,5 @@
 package TigersDen.BL.MovementService.DataModel;
 
-import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;

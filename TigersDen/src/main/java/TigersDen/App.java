@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
+import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
 import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.DAL.Contract.IBoardData;
@@ -14,14 +15,8 @@ import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public class App extends PApplet {
-    public String configPath;
-    public static final int SPRITESIZE = 100;// TODO:config
-    public static final int CELLSIZE = 100;// TODO:config
-    public static final int BOARD_WIDTH = 9;// TODO:config
-    public static final int BOARD_HEIGHT = 10;// TODO:config
-
-    public static int WIDTH = CELLSIZE * BOARD_WIDTH;
-    public static int HEIGHT = CELLSIZE * BOARD_HEIGHT;
+    public static int WIDTH;
+    public static int HEIGHT;
 
     public static final int FPS = 60;
 
@@ -32,10 +27,13 @@ public class App extends PApplet {
     IBoardData boardData;
 
     public App() {
-        this.configPath = "config.json";
     }
 
     public void settings() {
+        Injector injector = Guice.createInjector(new GuiceModule(this));
+        IConfigurationService configurationService = injector.getInstance(IConfigurationService.class);
+        WIDTH = configurationService.getScreenWidth();
+        HEIGHT = configurationService.getScreenHeight();
         size(WIDTH, HEIGHT);
     }
 
@@ -50,9 +48,11 @@ public class App extends PApplet {
             this.clickEventHandler = injector.getInstance(IEventHandlerService.class);
             this.movementService = injector.getInstance(IMovementService.class);
             this.boardData = injector.getInstance(IBoardData.class);
+           
+            
 
-            objectCreator.createPieces();
             objectCreator.createPlayers();
+            objectCreator.createPieces();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,6 +73,7 @@ public class App extends PApplet {
             
         } catch (Exception e) {
             e.printStackTrace();
+            this.exit();
         }
     }
 

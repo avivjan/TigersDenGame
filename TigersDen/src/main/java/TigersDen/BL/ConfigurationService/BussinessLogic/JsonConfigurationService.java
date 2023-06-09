@@ -23,9 +23,59 @@ public class JsonConfigurationService implements IConfigurationService {
             String jsonString = readJsonFile(jsonFilePath);
             Gson gson = new GsonBuilder().create();
             this.configurationData = gson.fromJson(jsonString, ConfigurationData.class);
+            checkConfigurationData();
 
         } catch (JsonSyntaxException e) {
             throw new IOException("Invalid JSON format", e);
+        }
+    }
+
+    private void checkConfigurationData() {
+        if (configurationData == null)
+            throw new IllegalArgumentException("Configuration data is null");
+        if (configurationData.getAssetsPath() == null || configurationData.getAssetsPath().isEmpty())
+            throw new IllegalArgumentException("Assets path is empty");
+        if (configurationData.getCellSize() <= 0)
+            throw new IllegalArgumentException("Cell size is not positive");
+        if (configurationData.getScreenHeight() <= 0)
+            throw new IllegalArgumentException("Screen height is not positive");
+        if (configurationData.getScreenWidth() <= 0)
+            throw new IllegalArgumentException("Screen width is not positive");
+        if (configurationData.getAssetsSize() <= 0)
+            throw new IllegalArgumentException("Assets size is not positive");
+        if (configurationData.getNumOfRows() <= 0)
+            throw new IllegalArgumentException("Number of rows is not positive");
+        if (configurationData.getNumOfCols() <= 0)
+            throw new IllegalArgumentException("Number of columns is not positive");
+        if (configurationData.getPlayersDetails() == null || configurationData.getPlayersDetails().isEmpty())
+            throw new IllegalArgumentException("Players details is empty");
+        if (configurationData.getPieceMovementSpeed() <= 0)
+            throw new IllegalArgumentException("Piece movement speed is not positive");
+        if (configurationData.getPlayersDetails().size() != 2) {
+            throw new IllegalArgumentException("Number of players is not 2");
+        }
+        int numOfPawnsPlayers = 0;
+        int numofTigerPlayers = 0;
+        for (PlayerDetails playerDetails : configurationData.getPlayersDetails()) {
+            if (playerDetails.getRole().equals("pawns"))
+            {
+                numOfPawnsPlayers++;
+                continue;
+            }
+            if (playerDetails.getRole().equals("tiger"))
+            {
+                numofTigerPlayers++;
+                continue;
+            }
+
+            throw new IllegalArgumentException("Player role is not valid");
+
+        }
+        if (numOfPawnsPlayers != 1) {
+            throw new IllegalArgumentException("Number of players with role pawns is not 1");
+        }
+        if (numofTigerPlayers != 1) {
+            throw new IllegalArgumentException("Number of players with role tiger is not 1");
         }
     }
 

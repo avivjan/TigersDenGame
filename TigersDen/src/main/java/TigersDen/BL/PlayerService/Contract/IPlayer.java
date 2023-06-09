@@ -6,7 +6,11 @@ public interface IPlayer
 {
     String getName();
 
-    void play(ICell cellClicked) throws Exception;
+    boolean play(ICell cellClicked) throws Exception;
     
     String getColor();
+
+    String getRole();
+
+    boolean isHuman();
 }

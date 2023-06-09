@@ -110,4 +110,11 @@ public class MovementService implements IMovementService {
         return movingDetails != null && movingDetails.getMovingPiece() == piece;
     }
 
+    @Override
+    public void ApplyMove(IPiece pieceToMove,ICell moveFrom , ICell moveTo) throws Exception {
+        pieceToMove.startMoving(moveTo);
+        board.DeselectCellIfExists();
+        moveFrom.setPieceOnIt(null);
+        moveTo.setPieceOnIt(pieceToMove);
+    }
 }

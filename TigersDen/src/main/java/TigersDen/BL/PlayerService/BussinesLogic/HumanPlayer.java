@@ -4,13 +4,17 @@ import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.DataModel.CellStatus;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.MovementService.BussinessLogic.MovementService;
+import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.DI.InjectorStorage;
 
 public class HumanPlayer extends AbstractPlayer{
     IBoard board;
+    IMovementService movementService;
     public HumanPlayer(String name, String color, String role) {
         super(name, color, role);
         board = InjectorStorage.getInjector().getInstance(IBoard.class);
+        movementService = InjectorStorage.getInjector().getInstance(MovementService.class);
     }
 
     @Override
@@ -34,10 +38,7 @@ public class HumanPlayer extends AbstractPlayer{
                 ICell moveTo = cellClicked;
                 IPiece pieceToMove = moveFrom.getPieceOnIt();
 
-                pieceToMove.startMoving(moveTo);
-                board.DeselectCellIfExists();
-                moveFrom.setPieceOnIt(null);
-                moveTo.setPieceOnIt(pieceToMove);
+                movementService.ApplyMove(pieceToMove,moveFrom, moveTo);
                 return true;
             }
             if (!cellClicked.canBeSelected()) {

@@ -27,8 +27,6 @@ public class EventHandlerService implements IEventHandlerService {
         try {
             System.out.println("Mouse Clicked" + "(x: " + event.getX() + ", " + event.getY() + ")");
             ICoordinate cor = Coordinate.createInstance(event.getX(), event.getY(), true);
-            System.out.println("(" + event.getX() + ", " + event.getY() + ")");
-            System.out.println(cor);
             ICell cellClicked = board.getCell(cor);
             if (cellClicked == null) {
                 System.err.println("The cell you pressed is not on the board!");

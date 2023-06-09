@@ -16,6 +16,7 @@ public class MovementService implements IMovementService {
     @Inject
     public MovementService(IBoard board) {
         this.board = board;
+        System.out.println("MovementService created");
     }
 
     @Override
@@ -115,6 +116,10 @@ public class MovementService implements IMovementService {
         moveFrom.setPieceOnIt(null);
         moveTo.setPieceOnIt(pieceToMove);
     }
+    @Override
+    public void ApplyMove(MovingDetails movingDetails) throws Exception {
+        ApplyMove(movingDetails.getMovingPiece(), movingDetails.getSourceCell(), movingDetails.getTargetCell());
+    }
 
     private void AddMovingDetails(MovingDetails movingDetails2) throws Exception {
         if (isMoving()) {
@@ -122,4 +127,6 @@ public class MovementService implements IMovementService {
         }
         this.movingDetails = movingDetails2;
     }
+
+
 }

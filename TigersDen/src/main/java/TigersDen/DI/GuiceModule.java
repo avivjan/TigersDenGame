@@ -3,6 +3,8 @@ package TigersDen.DI;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
+import TigersDen.BL.AI.BussinesLogic.TigerDenBrain;
+import TigersDen.BL.AI.Contract.ITigerDenBrain;
 import TigersDen.BL.BoardService.BussinessLogic.Board;
 import TigersDen.BL.BoardService.BussinessLogic.ObjectCreator;
 import TigersDen.BL.BoardService.Contract.IBoard;
@@ -50,6 +52,7 @@ public class GuiceModule extends AbstractModule {
         bind(IMovementService.class).to(MovementService.class).in(Singleton.class);
         bind(IBoardData.class).to(BoardData.class).in(Singleton.class);
         bind(IBoardValidator.class).to(BoardValidator.class).in(Singleton.class);
+        bind(ITigerDenBrain.class).to(TigerDenBrain.class).in(Singleton.class);
         
     }
     

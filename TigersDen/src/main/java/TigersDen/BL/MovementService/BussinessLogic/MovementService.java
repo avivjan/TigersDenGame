@@ -92,13 +92,7 @@ public class MovementService implements IMovementService {
         return movingPiece.getCoordinate().getDistanceTo(targetCell.getCoordinate()) < 0.1;
     }
 
-    @Override
-    public void AddMovingDetails(MovingDetails movingDetails2) throws Exception {
-        if (isMoving()) {
-            throw new Exception("Currently this is not possible to move two pieces at the same time");
-        }
-        this.movingDetails = movingDetails2;
-    }
+    
 
     @Override
     public boolean isMoving() {
@@ -112,9 +106,20 @@ public class MovementService implements IMovementService {
 
     @Override
     public void ApplyMove(IPiece pieceToMove,ICell moveFrom , ICell moveTo) throws Exception {
-        pieceToMove.startMoving(moveTo);
+        AddMovingDetails(new MovingDetails(pieceToMove, moveFrom, moveTo));
+        
+        if (pieceToMove.getCoordinate().equals(moveTo.getCoordinate())) {
+            throw new Exception("The piece is already in the target cell.");
+        }
         board.DeselectCellIfExists();
         moveFrom.setPieceOnIt(null);
         moveTo.setPieceOnIt(pieceToMove);
+    }
+
+    private void AddMovingDetails(MovingDetails movingDetails2) throws Exception {
+        if (isMoving()) {
+            throw new Exception("Currently this is not possible to move two pieces at the same time");
+        }
+        this.movingDetails = movingDetails2;
     }
 }

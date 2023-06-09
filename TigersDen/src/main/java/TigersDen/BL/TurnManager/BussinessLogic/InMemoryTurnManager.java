@@ -3,8 +3,6 @@ package TigersDen.BL.TurnManager.BussinessLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.checkerframework.checker.units.qual.C;
-
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardValidator.Contract.IBoardValidator;

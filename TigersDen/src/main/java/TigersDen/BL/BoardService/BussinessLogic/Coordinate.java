@@ -145,6 +145,15 @@ public class Coordinate implements ICoordinate {
     public boolean isOnBoard() {
         return isOnBoard(x, y, true);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Coordinate)) {
+            return false;
+        }
+        Coordinate other = (Coordinate) obj;
+        return other.x == x && other.y == y;
+    }
     
 
     public static  boolean isSpacialCoordinateByPixels(int x, int y) {

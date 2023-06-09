@@ -12,5 +12,4 @@ public interface IPiece {
     void setCoordinate(ICoordinate coordinate); 
     boolean isCaptured();
     List<ICell> getOptionalMovements(IBoard board) throws Exception;
-    void startMoving(ICell targetCell) throws Exception;
 }

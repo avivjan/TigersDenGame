@@ -8,11 +8,14 @@ import TigersDen.DI.InjectorStorage;
 public class MovingDetails {
     private int pieceMovementSpeed;
     private IPiece movingPiece;
+    private ICell sourceCell;
     private ICell targetCell;
+    
 
-    public MovingDetails(IPiece piece, ICell target) {
+    public MovingDetails(IPiece piece,ICell sourceCell,ICell target) {
         this.movingPiece = piece;
         this.targetCell = target;
+        this.sourceCell = sourceCell;
         this.pieceMovementSpeed = InjectorStorage.getInjector().getInstance(IConfigurationService.class).GetPieceMovementSpeed();
     }
 
@@ -50,5 +53,9 @@ public class MovingDetails {
             throw new IllegalArgumentException("Target cell coordinate is not on board.");
         }
         this.targetCell = targetCell;
-    }   
+    }  
+    
+    public ICell getSourceCell() {
+        return sourceCell;
+    }
 }

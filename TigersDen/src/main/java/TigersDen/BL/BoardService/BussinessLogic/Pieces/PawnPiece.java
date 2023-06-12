@@ -8,16 +8,14 @@ import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Model.ICell;
-import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
-import TigersDen.DI.InjectorStorage;
 
 public class PawnPiece extends AbstractPiece {
 
     private static final int[][] DIRECTIONS = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
 
     public PawnPiece(ICoordinate coordinate2, IPlayer player) {
-        super(coordinate2, player, InjectorStorage.getInjector().getInstance(IMovementService.class));
+        super(coordinate2, player);
     }
 
     @Override

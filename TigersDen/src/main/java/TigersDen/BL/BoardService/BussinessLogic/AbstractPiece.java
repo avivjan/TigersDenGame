@@ -9,6 +9,7 @@ import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
+import TigersDen.DI.InjectorStorage;
 
 public abstract class AbstractPiece implements IPiece {
     private IPlayer owningPlayer;
@@ -16,13 +17,16 @@ public abstract class AbstractPiece implements IPiece {
     protected UUID id;
     protected ICoordinate coordinate;
     protected IMovementService movementService;
+    protected IBoard board;
 
-    public AbstractPiece(ICoordinate coordinate2, IPlayer owningPlayer, IMovementService ms) {
-        this.movementService = ms;
+    public AbstractPiece(ICoordinate coordinate2, IPlayer owningPlayer) {
+        this.movementService = InjectorStorage.getInjector().getInstance(IMovementService.class);
         this.coordinate = coordinate2;
         this.owningPlayer = owningPlayer;
         isCaptured = false;
         id = UUID.randomUUID();
+        board = InjectorStorage.getInjector().getInstance(IBoard.class);
+
     }
 
     @Override
@@ -38,6 +42,7 @@ public abstract class AbstractPiece implements IPiece {
     @Override
     public void capture() {
         isCaptured = true;
+        board.getCell(coordinate).setPieceOnIt(null);
     }
 
     @Override

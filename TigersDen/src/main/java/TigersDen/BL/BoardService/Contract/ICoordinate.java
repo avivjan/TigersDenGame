@@ -7,6 +7,7 @@ public interface ICoordinate {
     int getYInPixels();
     boolean isValidCoordinate();
     double getDistanceTo(ICoordinate coordinate);
+    double getDistanceByRowAndColTo(ICoordinate coordinate);
     void setSpacial(boolean isSpacial);
     boolean isSpacial();
     boolean isOnBoard();

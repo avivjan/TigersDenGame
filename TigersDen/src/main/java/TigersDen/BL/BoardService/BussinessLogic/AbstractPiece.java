@@ -6,8 +6,8 @@ import java.util.UUID;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
-import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.MovementService.Contract.IMovementService;
+import TigersDen.BL.MovementService.DataModel.MovingDetails;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 import TigersDen.DI.InjectorStorage;
 
@@ -17,7 +17,7 @@ public abstract class AbstractPiece implements IPiece {
     protected UUID id;
     protected ICoordinate coordinate;
     protected IMovementService movementService;
-    protected IBoard board;
+    protected IBoard thisBoard;
 
     public AbstractPiece(ICoordinate coordinate2, IPlayer owningPlayer) {
         this.movementService = InjectorStorage.getInjector().getInstance(IMovementService.class);
@@ -25,12 +25,12 @@ public abstract class AbstractPiece implements IPiece {
         this.owningPlayer = owningPlayer;
         isCaptured = false;
         id = UUID.randomUUID();
-        board = InjectorStorage.getInjector().getInstance(IBoard.class);
+        thisBoard = InjectorStorage.getInjector().getInstance(IBoard.class);
 
     }
 
     @Override
-    public abstract List<ICell> getOptionalMovements(IBoard board) throws Exception;
+    public abstract List<MovingDetails> getOptionalMovements(IBoard board) throws Exception;
     @Override
     public abstract IPiece clone();
 
@@ -40,9 +40,13 @@ public abstract class AbstractPiece implements IPiece {
     }
 
     @Override
-    public void capture() {
+    // We need to pass board because in the AI if we capture we need to updatge the cloned board and not the original one.
+    public void capture(IBoard boardToMakeCaptureOnit) {
+        if (boardToMakeCaptureOnit == null) {
+            boardToMakeCaptureOnit = thisBoard;
+        }
         isCaptured = true;
-        board.getCell(coordinate).setPieceOnIt(null);
+        boardToMakeCaptureOnit.getCell(coordinate).setPieceOnIt(null);
     }
 
     @Override

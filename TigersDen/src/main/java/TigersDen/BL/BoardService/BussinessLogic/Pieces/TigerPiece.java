@@ -9,6 +9,7 @@ import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.MovementService.DataModel.MovingDetails;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public class TigerPiece extends AbstractPiece {
@@ -20,14 +21,15 @@ public class TigerPiece extends AbstractPiece {
     }
 
     @Override
-    public List<ICell> getOptionalMovements(IBoard board) throws Exception {
+    public List<MovingDetails> getOptionalMovements(IBoard board) throws Exception {
 
         try {
-            List<ICell> optionalMovements = new ArrayList<>();
+            List<MovingDetails> optionalMovements = new ArrayList<>();
 
             ICoordinate currentCoordinate = coordinate;
             int currentRow = currentCoordinate.getRow();
             int currentColumn = currentCoordinate.getColumn();
+            ICell currentCell = board.getCell(currentCoordinate);
 
             for (int[] direction : DIRECTIONS) {
                 int newRow = currentRow + direction[0];
@@ -38,7 +40,7 @@ public class TigerPiece extends AbstractPiece {
                     ICell newCell = board.getCell(newCoordinate);
 
                     if (newCell.isEmpty()) {
-                        optionalMovements.add(newCell);
+                        optionalMovements.add(new MovingDetails(this, currentCell, newCell, null, 0));
                     } else if (newCell.getPieceOnIt() instanceof PawnPiece) {
                         int nextRow = newRow + direction[0];
                         int nextColumn = newColumn + direction[1];
@@ -48,7 +50,7 @@ public class TigerPiece extends AbstractPiece {
                             ICell nextCell = board.getCell(nextCoordinate);
 
                             if (nextCell.isEmpty()) {
-                                optionalMovements.add(nextCell);
+                                optionalMovements.add(new MovingDetails(this, currentCell, nextCell, newCell.getCoordinate(), 0));
                             }
                         }
                     }
@@ -62,9 +64,10 @@ public class TigerPiece extends AbstractPiece {
         }
 
     }
+
     @Override
     public IPiece clone() {
-        TigerPiece cloned =  new TigerPiece(getCoordinate().clone(), getOwningPlayer().clone());
+        TigerPiece cloned = new TigerPiece(getCoordinate().clone(), getOwningPlayer().clone());
         cloned.isCaptured = isCaptured;
         return cloned;
     }

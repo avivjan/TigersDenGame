@@ -193,4 +193,11 @@ public class Coordinate implements ICoordinate {
         return new Coordinate(x, y, isSpacial);
 
     }
+
+    @Override
+    public double getDistanceByRowAndColTo(ICoordinate coordinate) {
+        int xTarget = coordinate.getColumn();
+        int yTarget = coordinate.getRow();
+        return Math.sqrt(Math.pow(getColumn() - xTarget, 2) + Math.pow(getRow() - yTarget, 2));
+    }
 }

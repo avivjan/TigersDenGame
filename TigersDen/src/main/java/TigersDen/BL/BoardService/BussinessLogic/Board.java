@@ -1,6 +1,7 @@
 package TigersDen.BL.BoardService.BussinessLogic;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
@@ -74,7 +75,11 @@ public class Board implements IBoard {
             DeselectCellIfExists();
             cell.setStatus(CellStatus.Selected);
             setSelectedCell(cell);
-            for (ICell optionalCell : cell.getPieceOnIt().getOptionalMovements(this)) {
+            for (ICell optionalCell : cell.getPieceOnIt().getOptionalMovements(this)
+                                                         .stream()
+                                                         .map(movingDetails ->movingDetails.getTargetCell())
+                                                         .collect(Collectors.toList()))
+            {
                 if (optionalCell.getPieceOnIt() != null && optionalCell.getPieceOnIt().getOwningPlayer() != this) {
                     optionalCell.setStatus(CellStatus.OptionWithCapture);
                     System.out.println("Cell " + optionalCell.getCoordinate() + " is an option with capture");

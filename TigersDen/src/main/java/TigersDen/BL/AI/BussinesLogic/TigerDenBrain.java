@@ -2,6 +2,7 @@ package TigersDen.BL.AI.BussinesLogic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
@@ -13,9 +14,10 @@ import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.BoardValidator.Contract.IBoardValidator;
+import TigersDen.BL.MovementService.DataModel.MovingDetails;
 
 public class TigerDenBrain implements ITigerDenBrain {
-    private final int MAX_DEPTH = 5;
+    private final int MAX_DEPTH = 2;
     private IBoardValidator boardValidator;
 
     @Inject
@@ -26,8 +28,9 @@ public class TigerDenBrain implements ITigerDenBrain {
     @Override
     public Move minimax(IBoard boardToMakeMoveOnit, int depth, boolean isTigerPlayer) throws Exception {
         try {
+            System.out.println("String minimax method. depth:" + depth);
             if (boardValidator.getWinnerRole() != null || depth == MAX_DEPTH) {
-                return new Move(-1, -1, -1, -1, evaluate(boardToMakeMoveOnit));
+                return new Move(-1, -1, -1, -1, null, evaluate(boardToMakeMoveOnit));
             }
 
             if (isTigerPlayer) {
@@ -83,7 +86,7 @@ public class TigerDenBrain implements ITigerDenBrain {
         }
     }
 
-    private void applyMove(IBoard board, Move move) {
+    private void applyMove(IBoard board, Move move) throws Exception {
         if (move == null) {
             throw new NullPointerException("Move is null.");
         }
@@ -120,11 +123,18 @@ public class TigerDenBrain implements ITigerDenBrain {
         sourceCell.setPieceOnIt(null);
         targetCell.setPieceOnIt(movingPiece);
         movingPiece.setCoordinate(targetCell.getCoordinate());
+
+        if (move.getCapturePieceCoordinate() != null) {
+            board.getCell(move.getCapturePieceCoordinate()).getPieceOnIt().capture(board);
+        }
     }
 
     private List<Move> generatePossibleMovesForTiger(IBoard boardToMakeMoveOnIt) throws Exception {
         IPiece tigerPiece = null;
-        for (IPiece piece : boardToMakeMoveOnIt.getPieces()) {
+        for (IPiece piece : boardToMakeMoveOnIt.getPieces().stream()
+                                                           .filter(piece -> !piece.isCaptured())
+                                                           .collect(Collectors.toList())) 
+        {
             if (piece.getOwningPlayer().getRole().equals("tiger")) {
                 if (tigerPiece != null) {
                     throw new Exception("More than one tiger piece found on the board.");
@@ -137,13 +147,14 @@ public class TigerDenBrain implements ITigerDenBrain {
         }
 
         List<Move> possibleMoves = new ArrayList<>();
-        for (ICell optionalCell : tigerPiece.getOptionalMovements(boardToMakeMoveOnIt)) {
+        for (MovingDetails movingDetails : tigerPiece.getOptionalMovements(boardToMakeMoveOnIt)) {
             ICoordinate sourceCor = tigerPiece.getCoordinate();
-            ICoordinate targetCor = optionalCell.getCoordinate();
+            ICoordinate targetCor = movingDetails.getTargetCell().getCoordinate();
             Move move = new Move(sourceCor.getColumn(),
                     sourceCor.getRow(),
                     targetCor.getColumn(),
                     targetCor.getRow(),
+                    movingDetails.getCapturedPieceCoordinate(),
                     0);
 
             possibleMoves.add(move);
@@ -155,22 +166,24 @@ public class TigerDenBrain implements ITigerDenBrain {
         List<Move> possibleMoves = new ArrayList<>();
         List<IPiece> optionalPieces = new ArrayList<>();
 
-        for (IPiece piece : boardToMakeMoveOint.getPieces()) {
-            if (piece.getOwningPlayer().getRole().equals("pawns")) {
+        for (IPiece piece : boardToMakeMoveOint.getPieces().stream()
+                                                           .filter(piece -> !piece.isCaptured()
+                                                                     && piece.getOwningPlayer().getRole().equals("pawns"))
+                                                           .collect(Collectors.toList()))
+        {
                 optionalPieces.add(piece);
-            }
         }
 
         for (IPiece optionalPiece : optionalPieces) {
-
-            List<ICell> optionalMovements = optionalPiece.getOptionalMovements(boardToMakeMoveOint);
-            for (ICell optionalCell : optionalMovements) {
-                Move movingDetails = new Move(optionalPiece.getCoordinate().getColumn(),
+            for (MovingDetails movingDetails : optionalPiece.getOptionalMovements(boardToMakeMoveOint)) {
+                ICoordinate targetCor = movingDetails.getTargetCell().getCoordinate();
+                Move move = new Move(optionalPiece.getCoordinate().getColumn(),
                         optionalPiece.getCoordinate().getRow(),
-                        optionalCell.getCoordinate().getColumn(),
-                        optionalCell.getCoordinate().getRow(),
+                        targetCor.getColumn(),
+                        targetCor.getRow(),
+                        movingDetails.getCapturedPieceCoordinate(),
                         0);
-                possibleMoves.add(movingDetails);
+                possibleMoves.add(move);
             }
         }
         return possibleMoves;
@@ -181,23 +194,24 @@ public class TigerDenBrain implements ITigerDenBrain {
         double totalDistanceToTiger = calculateTotalDistancesSquaredToTiger(board);
         int numOfTigerPossibleMoves = getNumOfTigerPossibleMoves(board);
 
-        double piecesWeight = 1;
-        double distanceWeight = 1;
-        double possibleMovesWeight = 1;
+        double piecesWeight = 10;
+        double distanceWeight = 0;
+        double possibleMovesWeight = 0;
 
         return piecesWeight * numPiecesNotCaptured +
-               distanceWeight * totalDistanceToTiger + 
-               possibleMovesWeight * numOfTigerPossibleMoves;
+                distanceWeight * totalDistanceToTiger +
+                possibleMovesWeight * numOfTigerPossibleMoves;
     }
 
     private int getNumOfTigerPossibleMoves(IBoard board) throws Exception {
         IPiece tigerPiece = board.getPieces().stream()
-                                 .filter(p -> p.getOwningPlayer()
-                                               .getRole().equals("tiger"))
-                                .findFirst()
-                                .get();
+                .filter(p -> p.getOwningPlayer()
+                        .getRole().equals("tiger"))
+                .findFirst()
+                .get();
         return tigerPiece.getOptionalMovements(board).size();
     }
+
     private int countPiecesCaptured(IBoard board) {
         int count = 0;
 
@@ -212,19 +226,18 @@ public class TigerDenBrain implements ITigerDenBrain {
     private double calculateTotalDistancesSquaredToTiger(IBoard board) {
         int totalDistance = 0;
         IPiece tigerPiece = board.getPieces().stream()
-                                 .filter(p -> p.getOwningPlayer()
-                                               .getRole().equals("tiger"))
-                                .findFirst()
-                                .get();
+                .filter(p -> p.getOwningPlayer()
+                        .getRole().equals("tiger"))
+                .findFirst()
+                .get();
 
         for (IPiece piece : board.getPieces()) {
             if (!piece.isCaptured() && piece.getOwningPlayer().getRole().equals("pawns")) {
-                double distance = piece.getCoordinate().getDistanceTo(tigerPiece.getCoordinate())/100;
+                double distance = piece.getCoordinate().getDistanceByRowAndColTo(tigerPiece.getCoordinate());
                 totalDistance += Math.pow(distance, 2);
             }
         }
-        return totalDistance/100;
+        return totalDistance;
     }
 
-   
 }

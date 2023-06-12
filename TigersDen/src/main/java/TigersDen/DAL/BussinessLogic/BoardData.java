@@ -2,6 +2,7 @@ package TigersDen.DAL.BussinessLogic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import TigersDen.BL.BoardService.BussinessLogic.Cell;
 import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
@@ -46,6 +47,7 @@ public class BoardData implements IBoardData {
 
     @Override
     public ICell getCell(ICoordinate coordinate) throws IllegalArgumentException {
+        
         if (!initialized) {
             init();
         }
@@ -225,6 +227,9 @@ public class BoardData implements IBoardData {
                     clone.optionCells.add(cell);
                 }
             }
+        }
+        for (IPiece p : getPieces().stream().filter(p -> p.isCaptured()).collect(Collectors.toList())) {
+            clone.pieces.add(p.clone());
         }
         clone.initialized = initialized;
         return clone;

@@ -32,27 +32,10 @@ public class CpuPlayer extends AbstractPlayer {
         Move AIMove = brain.minimax(board, 0, true);
         MovingDetails movingDetails = generateMovingDetailsFromAIMove(AIMove);
         movementService.ApplyMove(movingDetails);
-        IPiece capturedPiece = getCapturedPiece(movingDetails);
-        if (capturedPiece != null) {
-            capturedPiece.capture();
-        }
-    }
-
-    private IPiece getCapturedPiece(MovingDetails movingDetails) {
-        ICoordinate sourceCoordinate = movingDetails.getSourceCell().getCoordinate();
-        ICoordinate targetCoordinate = movingDetails.getTargetCell().getCoordinate();
-        if (!HasCaputured(sourceCoordinate, targetCoordinate)) {
-            return null;
-        }
-        int capturedRow = (sourceCoordinate.getRow() + targetCoordinate.getRow()) / 2;
-        int capturedColumn = (sourceCoordinate.getColumn() + targetCoordinate.getColumn()) / 2;
-        ICoordinate capturedCoordinate = Coordinate.createInstance(capturedRow, capturedColumn, false);
-        return board.getCell(capturedCoordinate).getPieceOnIt();
-    }
-
-    private boolean HasCaputured(ICoordinate sourceCoordinate, ICoordinate targetCoordinate) {
-        return !(Math.abs(sourceCoordinate.getRow() - targetCoordinate.getRow()) < 2 &&
-                Math.abs(sourceCoordinate.getColumn() - targetCoordinate.getColumn()) < 2);
+        if (movingDetails.getCapturedPieceCoordinate() != null)
+        {
+            board.getCell(movingDetails.getCapturedPieceCoordinate()).getPieceOnIt().capture(null);
+        }   
     }
 
     private MovingDetails generateMovingDetailsFromAIMove(Move aIMove) {
@@ -74,7 +57,7 @@ public class CpuPlayer extends AbstractPlayer {
             targetCoordinate = Coordinate.createInstance(aIMove.getTargetRow(), aIMove.getTargetColumn(), false);
         }
         ICell targetCell = board.getCell(targetCoordinate);
-        return new MovingDetails(movingPiece, sourceCell, targetCell);
+        return new MovingDetails(movingPiece, sourceCell,targetCell,aIMove.getCapturePieceCoordinate(), 0);
     }
 
     @Override

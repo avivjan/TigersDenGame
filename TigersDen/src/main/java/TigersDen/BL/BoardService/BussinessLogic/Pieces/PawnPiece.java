@@ -8,6 +8,7 @@ import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.MovementService.DataModel.MovingDetails;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public class PawnPiece extends AbstractPiece {
@@ -19,10 +20,10 @@ public class PawnPiece extends AbstractPiece {
     }
 
     @Override
-    public List<ICell> getOptionalMovements(IBoard board) throws Exception {
+    public List<MovingDetails> getOptionalMovements(IBoard board) throws Exception {
 
         try {
-            List<ICell> optionalMovements = new ArrayList<>();
+            List<MovingDetails> optionalMovements = new ArrayList<>();
 
             ICoordinate currentCoordinate = getCoordinate();
             int currentRow = currentCoordinate.getRow();
@@ -37,7 +38,11 @@ public class PawnPiece extends AbstractPiece {
                     ICell newCell;
                     newCell = board.getCell(newCoordinate);
                     if (newCell.isEmpty()) {
-                        optionalMovements.add(newCell);
+                        ICell currentCell = board.getCell(coordinate);
+                        ICell destinationCell = board.getCell(newCoordinate);
+
+                        MovingDetails movingDetails = new MovingDetails(this, currentCell, destinationCell, null, 0);
+                        optionalMovements.add(movingDetails);
                     }
                 }
             }
@@ -52,7 +57,6 @@ public class PawnPiece extends AbstractPiece {
     @Override
     public PawnPiece clone() {
         PawnPiece cloned =  new PawnPiece(getCoordinate().clone(), getOwningPlayer().clone());
-        cloned.id = id;
         cloned.isCaptured = isCaptured;
         return cloned;
     }

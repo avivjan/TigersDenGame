@@ -1,5 +1,6 @@
 package TigersDen.BL.MovementService.DataModel;
 
+import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
@@ -10,14 +11,16 @@ public class MovingDetails {
     private IPiece movingPiece;
     private ICell sourceCell;
     private ICell targetCell;
+    private ICoordinate capturedPieceCor;
     private int evaluationAfterTheMove;
     
 
-    public MovingDetails(IPiece piece,ICell sourceCell,ICell target, int evaluationAfterTheMove) {
+    public MovingDetails(IPiece piece,ICell sourceCell,ICell target,ICoordinate capturedPieceCor ,int evaluationAfterTheMove) {
         this.movingPiece = piece;
         this.targetCell = target;
         this.sourceCell = sourceCell;
         this.evaluationAfterTheMove = evaluationAfterTheMove;
+        this.capturedPieceCor = capturedPieceCor;
         this.pieceMovementSpeed = InjectorStorage.getInjector().getInstance(IConfigurationService.class).GetPieceMovementSpeed();
     }
 
@@ -75,5 +78,10 @@ public class MovingDetails {
 
     public void setEvaluationAfterTheMove(int evaluationAfterTheMove2) {
         this.evaluationAfterTheMove = evaluationAfterTheMove2;
+    }
+
+    public ICoordinate getCapturedPieceCoordinate() {
+        return capturedPieceCor;
+        
     }
 }

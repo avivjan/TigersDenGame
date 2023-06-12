@@ -30,7 +30,7 @@ public class HumanPlayer extends AbstractPlayer{
                 if (cellStatus == CellStatus.OptionWithCapture)
                 {
                     //capture
-                    cellClicked.getPieceOnIt().capture();
+                    cellClicked.getPieceOnIt().capture(null);
                     cellClicked.setPieceOnIt(null);
                 }
                 movementService.ApplyMove(board.getSelectedCell().getPieceOnIt(),board.getSelectedCell(), cellClicked);

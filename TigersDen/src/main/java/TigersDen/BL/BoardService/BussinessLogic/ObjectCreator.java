@@ -15,8 +15,7 @@ import TigersDen.BL.PlayerService.BussinesLogic.HumanPlayer;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 
 public class ObjectCreator implements IObjectCreator {
-    private int numOfRows;
-    private int numOfCols;
+
 
     private IBoard board;
     private ITurnManager turnManager;
@@ -27,8 +26,6 @@ public class ObjectCreator implements IObjectCreator {
         this.board = board;
         this.turnManager = turnManager;
         this.configService = configService;
-        this.numOfRows = configService.getNumOfRows();
-        this.numOfCols = configService.getNumOfCols();
     }
 
     @Override
@@ -39,24 +36,33 @@ public class ObjectCreator implements IObjectCreator {
                 turnManager.addPlayer(
                         new HumanPlayer(playerDetails.getName(), playerDetails.getColor(), playerDetails.getRole()));
             } else {
-                turnManager.addPlayer(new CpuPlayer(playerDetails.getName(), playerDetails.getColor(), playerDetails.getRole()));
+                turnManager.addPlayer(
+                        new CpuPlayer(playerDetails.getName(), playerDetails.getColor(), playerDetails.getRole()));
             }
         }
     }
 
     @Override
-    public void createPieces() throws Exception  {
+    public void createPieces() throws Exception {
         try {
             IPiece piece = new TigerPiece(Coordinate.createSpacialInstance(), turnManager.getPlayerByRole("tiger"));
             board.addPiece(piece);
+            ICoordinate tempCor = Coordinate.createInstance(7, 7, false);
+            IPiece tmpPiece = new PawnPiece(tempCor, turnManager.getPlayerByRole("pawns"));
+            board.addPiece(tmpPiece);
 
-            for (int row = numOfRows - 2; row < numOfRows; row++) {
-                for (int column = 0; column < numOfCols; column++) {
-                    ICoordinate tempCor = Coordinate.createInstance(row, column, false);
-                    IPiece tmpPiece = new PawnPiece(tempCor, turnManager.getPlayerByRole("pawns"));
-                    board.addPiece(tmpPiece);
-                }
-            }
+             tempCor = Coordinate.createInstance(8, 7, false);
+             tmpPiece = new PawnPiece(tempCor, turnManager.getPlayerByRole("pawns"));
+            board.addPiece(tmpPiece);
+
+            // for (int row = numOfRows - 2; row < numOfRows; row++) {
+            // for (int column = 0; column < numOfCols; column++) {
+            // ICoordinate tempCor = Coordinate.createInstance(row, column, false);
+            // IPiece tmpPiece = new PawnPiece(tempCor,
+            // turnManager.getPlayerByRole("pawns"));
+            // board.addPiece(tmpPiece);
+            // }
+            // }
         } catch (Exception e) {
             System.err.println("Error in createPieces");
             e.printStackTrace();

@@ -22,11 +22,12 @@ public class TigerDenBrain implements ITigerDenBrain {
     public TigerDenBrain(IBoardValidator boardValidator, IBoard b) {
         this.boardValidator = boardValidator;
     }
+
     @Override
     public Move minimax(IBoard boardToMakeMoveOnit, int depth, boolean isTigerPlayer) throws Exception {
         try {
             if (boardValidator.getWinnerRole() != null || depth == MAX_DEPTH) {
-                return new Move(-1,-1,-1,-1, evaluate(boardToMakeMoveOnit));
+                return new Move(-1, -1, -1, -1, evaluate(boardToMakeMoveOnit));
             }
 
             if (isTigerPlayer) {
@@ -44,11 +45,11 @@ public class TigerDenBrain implements ITigerDenBrain {
 
                     // Recursively call the minimax method for the opponent player
                     Move result = minimax(newGameState, depth + 1, false);
+                    move.setEvaluationAfterTheMove(result.getEvaluationAfterTheMove());
 
                     // Update the best move if a higher score is found
                     if (result.getEvaluationAfterTheMove() > bestMove.getEvaluationAfterTheMove()) {
                         bestMove = move;
-                        move.setEvaluationAfterTheMove(result.getEvaluationAfterTheMove());
                     }
                 }
                 return bestMove;
@@ -57,23 +58,24 @@ public class TigerDenBrain implements ITigerDenBrain {
                 if (possibleMoves.size() == 0) {
                     throw new Exception("No possible moves for the pawns player.");
                 }
-                    Move bestMove = possibleMoves.get(0);
+                Move bestMove = possibleMoves.get(0);
 
-                    for (Move move : possibleMoves) {
-                        // Make a copy of the game state and apply the move
-                        IBoard newGameState = boardToMakeMoveOnit.clone();
-                        applyMove(newGameState, move);
+                for (Move move : possibleMoves) {
+                    // Make a copy of the game state and apply the move
+                    IBoard newGameState = boardToMakeMoveOnit.clone();
+                    applyMove(newGameState, move);
 
-                        // Recursively call the minimax method for the opponent player
-                        Move result = minimax(newGameState, depth + 1, true);
+                    // Recursively call the minimax method for the opponent player
+                    Move result = minimax(newGameState, depth + 1, true);
+                    move.setEvaluationAfterTheMove(result.getEvaluationAfterTheMove());
 
-                        // Update the best move if a lower score is found
-                        if (result.getEvaluationAfterTheMove() < bestMove.getEvaluationAfterTheMove()) {
-                            bestMove = move;
-                        }
+                    // Update the best move if a lower score is found
+                    if (result.getEvaluationAfterTheMove() < bestMove.getEvaluationAfterTheMove()) {
+                        bestMove = move;
                     }
-                    return bestMove;
                 }
+                return bestMove;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +108,7 @@ public class TigerDenBrain implements ITigerDenBrain {
         if (move.getTargetColumn() == 4 && move.getTargetRow() == -1) {
             targetCoordinate = Coordinate.createSpacialInstance();
         } else {
-            targetCoordinate = Coordinate.createInstance(move.getTargetRow(),move.getTargetColumn(),false);
+            targetCoordinate = Coordinate.createInstance(move.getTargetRow(), move.getTargetColumn(), false);
         }
         if (targetCoordinate == null) {
             throw new NullPointerException("Target coordinate is null.");
@@ -119,6 +121,7 @@ public class TigerDenBrain implements ITigerDenBrain {
         targetCell.setPieceOnIt(movingPiece);
         movingPiece.setCoordinate(targetCell.getCoordinate());
     }
+
     private List<Move> generatePossibleMovesForTiger(IBoard boardToMakeMoveOnIt) throws Exception {
         IPiece tigerPiece = null;
         for (IPiece piece : boardToMakeMoveOnIt.getPieces()) {
@@ -132,16 +135,16 @@ public class TigerDenBrain implements ITigerDenBrain {
         if (tigerPiece == null) {
             throw new Exception("No tiger piece found on the board.");
         }
-        
+
         List<Move> possibleMoves = new ArrayList<>();
         for (ICell optionalCell : tigerPiece.getOptionalMovements(boardToMakeMoveOnIt)) {
             ICoordinate sourceCor = tigerPiece.getCoordinate();
-            ICoordinate targetCor =  optionalCell.getCoordinate();
+            ICoordinate targetCor = optionalCell.getCoordinate();
             Move move = new Move(sourceCor.getColumn(),
-                                          sourceCor.getRow(),
-                                          targetCor.getColumn(),
-                                          targetCor.getRow(),
-                                          0);
+                    sourceCor.getRow(),
+                    targetCor.getColumn(),
+                    targetCor.getRow(),
+                    0);
 
             possibleMoves.add(move);
         }
@@ -163,18 +166,53 @@ public class TigerDenBrain implements ITigerDenBrain {
             List<ICell> optionalMovements = optionalPiece.getOptionalMovements(boardToMakeMoveOint);
             for (ICell optionalCell : optionalMovements) {
                 Move movingDetails = new Move(optionalPiece.getCoordinate().getColumn(),
-                                                        optionalPiece.getCoordinate().getRow(),
-                                                        optionalCell.getCoordinate().getColumn(),
-                                                        optionalCell.getCoordinate().getRow(),
-                                                        0);
+                        optionalPiece.getCoordinate().getRow(),
+                        optionalCell.getCoordinate().getColumn(),
+                        optionalCell.getCoordinate().getRow(),
+                        0);
                 possibleMoves.add(movingDetails);
             }
         }
         return possibleMoves;
     }
 
-    private int evaluate(IBoard board) {
-        return 0;
+    private double evaluate(IBoard board) {
+        int numPiecesNotCaptured = countPiecesCaptured(board);
+        double totalDistanceToTiger = calculateTotalDistancesSquaredToTiger(board);
+
+        double piecesWeight = 1;
+        double distanceWeight = 100;
+
+        return piecesWeight * numPiecesNotCaptured + distanceWeight * totalDistanceToTiger;
     }
 
+    private int countPiecesCaptured(IBoard board) {
+        int count = 0;
+
+        for (IPiece piece : board.getPieces()) {
+            if (piece.isCaptured()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private double calculateTotalDistancesSquaredToTiger(IBoard board) {
+        int totalDistance = 0;
+        IPiece tigerPiece = board.getPieces().stream()
+                                 .filter(p -> p.getOwningPlayer()
+                                               .getRole().equals("tiger"))
+                                .findFirst()
+                                .get();
+
+        for (IPiece piece : board.getPieces()) {
+            if (!piece.isCaptured() && piece.getOwningPlayer().getRole().equals("pawns")) {
+                double distance = piece.getCoordinate().getDistanceTo(tigerPiece.getCoordinate());
+                totalDistance += Math.pow(distance, 2);
+            }
+        }
+        return totalDistance;
+    }
+
+   
 }

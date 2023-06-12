@@ -1,12 +1,13 @@
 package TigersDen.BL.AI.DataModel;
 
+
 public class Move {
     private int sourceColumn;
     private int sourceRow;
     private int targetColumn;
     private int targetRow;
-    private int evaluationAfterTheMove;
-    public Move(int sourceColumn, int sourceRow, int targetColumn, int targetRow, int evaluationAfterTheMove) {
+    private double evaluationAfterTheMove;
+    public Move(int sourceColumn, int sourceRow, int targetColumn, int targetRow, double evaluationAfterTheMove) {
         this.sourceColumn = sourceColumn;
         this.sourceRow = sourceRow;
         this.targetColumn = targetColumn;
@@ -37,10 +38,10 @@ public class Move {
     public void setTargetRow(int targetRow) {
         this.targetRow = targetRow;
     }
-    public int getEvaluationAfterTheMove() {
+    public double getEvaluationAfterTheMove() {
         return evaluationAfterTheMove;
     }
-    public void setEvaluationAfterTheMove(int evaluationAfterTheMove) {
+    public void setEvaluationAfterTheMove(double evaluationAfterTheMove) {
         this.evaluationAfterTheMove = evaluationAfterTheMove;
     }
     @Override

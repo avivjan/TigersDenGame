@@ -1,5 +1,7 @@
 package TigersDen.BL.PlayerService.BussinesLogic;
 
+import org.checkerframework.checker.units.qual.m;
+
 import TigersDen.BL.AI.Contract.ITigerDenBrain;
 import TigersDen.BL.AI.DataModel.Move;
 import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
@@ -11,7 +13,7 @@ import TigersDen.BL.MovementService.DataModel.MovingDetails;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 import TigersDen.DI.InjectorStorage;
 
-public class CpuPlayer extends AbstractPlayer{
+public class CpuPlayer extends AbstractPlayer {
     private ITigerDenBrain brain;
     private IBoard board;
 
@@ -23,14 +25,35 @@ public class CpuPlayer extends AbstractPlayer{
 
     @Override
     public void play(ICell cellClicked) throws Exception {
-        if (cellClicked != null)
-        {
+        if (cellClicked != null) {
             throw new Exception("The play method of the CpuPlayer class should not be called with a cell.");
         }
-        //Something is wrong here  - the is changed after the ai. piece onto the tigerden is moved!
-        Move AIMove = brain.minimax (board, 0, true);
+        // Something is wrong here - the is changed after the ai. piece onto the
+        // tigerden is moved!
+        Move AIMove = brain.minimax(board, 0, true);
         MovingDetails movingDetails = generateMovingDetailsFromAIMove(AIMove);
         movementService.ApplyMove(movingDetails);
+        IPiece capturedPiece = getCapturedPiece(movingDetails);
+        if (capturedPiece != null) {
+            capturedPiece.capture();
+        }
+    }
+
+    private IPiece getCapturedPiece(MovingDetails movingDetails) {
+        ICoordinate sourceCoordinate = movingDetails.getSourceCell().getCoordinate();
+        ICoordinate targetCoordinate = movingDetails.getTargetCell().getCoordinate();
+        if (!HasCaputured(sourceCoordinate, targetCoordinate)) {
+            return null;
+        }
+        int capturedRow = (sourceCoordinate.getRow() + targetCoordinate.getRow()) / 2;
+        int capturedColumn = (sourceCoordinate.getColumn() + targetCoordinate.getColumn()) / 2;
+        ICoordinate capturedCoordinate = Coordinate.createInstance(capturedRow, capturedColumn, false);
+        return board.getCell(capturedCoordinate).getPieceOnIt();
+    }
+
+    private boolean HasCaputured(ICoordinate sourceCoordinate, ICoordinate targetCoordinate) {
+        return !(Math.abs(sourceCoordinate.getRow() - targetCoordinate.getRow()) < 2 &&
+                Math.abs(sourceCoordinate.getColumn() - targetCoordinate.getColumn()) < 2);
     }
 
     private MovingDetails generateMovingDetailsFromAIMove(Move aIMove) {

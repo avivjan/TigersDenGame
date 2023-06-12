@@ -1,4 +1,4 @@
-package TigersDen.UI.DrawingService.BussinessLogic;
+package TigersDen;
 
 import com.google.inject.Inject;
 

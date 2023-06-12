@@ -15,7 +15,7 @@ import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.BoardValidator.Contract.IBoardValidator;
 
 public class TigerDenBrain implements ITigerDenBrain {
-    private final int MAX_DEPTH = 3;
+    private final int MAX_DEPTH = 5;
     private IBoardValidator boardValidator;
 
     @Inject
@@ -176,16 +176,28 @@ public class TigerDenBrain implements ITigerDenBrain {
         return possibleMoves;
     }
 
-    private double evaluate(IBoard board) {
+    private double evaluate(IBoard board) throws Exception {
         int numPiecesNotCaptured = countPiecesCaptured(board);
         double totalDistanceToTiger = calculateTotalDistancesSquaredToTiger(board);
+        int numOfTigerPossibleMoves = getNumOfTigerPossibleMoves(board);
 
         double piecesWeight = 1;
-        double distanceWeight = 100;
+        double distanceWeight = 1;
+        double possibleMovesWeight = 1;
 
-        return piecesWeight * numPiecesNotCaptured + distanceWeight * totalDistanceToTiger;
+        return piecesWeight * numPiecesNotCaptured +
+               distanceWeight * totalDistanceToTiger + 
+               possibleMovesWeight * numOfTigerPossibleMoves;
     }
 
+    private int getNumOfTigerPossibleMoves(IBoard board) throws Exception {
+        IPiece tigerPiece = board.getPieces().stream()
+                                 .filter(p -> p.getOwningPlayer()
+                                               .getRole().equals("tiger"))
+                                .findFirst()
+                                .get();
+        return tigerPiece.getOptionalMovements(board).size();
+    }
     private int countPiecesCaptured(IBoard board) {
         int count = 0;
 
@@ -207,11 +219,11 @@ public class TigerDenBrain implements ITigerDenBrain {
 
         for (IPiece piece : board.getPieces()) {
             if (!piece.isCaptured() && piece.getOwningPlayer().getRole().equals("pawns")) {
-                double distance = piece.getCoordinate().getDistanceTo(tigerPiece.getCoordinate());
+                double distance = piece.getCoordinate().getDistanceTo(tigerPiece.getCoordinate())/100;
                 totalDistance += Math.pow(distance, 2);
             }
         }
-        return totalDistance;
+        return totalDistance/100;
     }
 
    

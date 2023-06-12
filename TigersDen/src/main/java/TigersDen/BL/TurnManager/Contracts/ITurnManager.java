@@ -5,7 +5,7 @@ import TigersDen.BL.PlayerService.Contract.IPlayer;
 
 public interface ITurnManager {
     IPlayer getPlayerInTurn();
-    void setNextPlayerInTurn();
+    void setNextPlayerInTurn() throws Exception;
     List<IPlayer> getAllPlayers();
     List<IPlayer> getHumanPlayers();
     List<IPlayer> getCPUPlayers();

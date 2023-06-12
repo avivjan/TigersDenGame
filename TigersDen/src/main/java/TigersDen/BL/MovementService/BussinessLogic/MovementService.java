@@ -8,15 +8,18 @@ import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.BL.MovementService.DataModel.MovingDetails;
+import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 
 public class MovementService implements IMovementService {
     private MovingDetails movingDetails;
     private IBoard board;
+    private ITurnManager turnManager;
 
     @Inject
-    public MovementService(IBoard board) {
+    public MovementService(IBoard board, ITurnManager turnManager) {
         this.board = board;
-        System.out.println("MovementService created");
+        this.turnManager = turnManager;
+        System.out.println("MovementService: created!!!!!!!!!!!!!!!");
     }
 
     @Override
@@ -24,6 +27,7 @@ public class MovementService implements IMovementService {
         if (movingDetails == null) {
             return;
         }
+        
         IPiece movingPiece = movingDetails.getMovingPiece();
         ICell targetCell = movingDetails.getTargetCell();
 
@@ -56,9 +60,6 @@ public class MovementService implements IMovementService {
             int signY = deltaY > 0 ? 1 : -1;
             Double ratex = Math.pow(deltaX / distance, 2);
             Double ratey = Math.pow(deltaY / distance, 2);
-            if (ratex + ratey != 1) {
-                throw new Exception("ratex + ratey != 1");
-            }
             ratex = ratex * signX;
             ratey = ratey * signY;
             Double vx = ratex * speed;
@@ -78,11 +79,12 @@ public class MovementService implements IMovementService {
         movingPiece.setCoordinate(Coordinate.createInstance(newX, newY, true));
 
         if (hasReached()) {
-            System.out.println("MovementService: Piece" + movingPiece.getClass()
-                    + "has just reached his destination");
+            System.out.println(movingPiece.getOwningPlayer().getName()+ 
+                               " piece has just reached his destination");
             movingPiece.setCoordinate(targetCell.getCoordinate());
             board.DeselectCellIfExists();
             movingDetails = null;
+            turnManager.setNextPlayerInTurn();
         }
     }
 
@@ -127,6 +129,4 @@ public class MovementService implements IMovementService {
         }
         this.movingDetails = movingDetails2;
     }
-
-
 }

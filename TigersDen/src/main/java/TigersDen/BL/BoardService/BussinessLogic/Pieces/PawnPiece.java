@@ -21,10 +21,9 @@ public class PawnPiece extends AbstractPiece {
     }
 
     @Override
-    public List<ICell> getOptionalMovements(IBoard board) {
+    public List<ICell> getOptionalMovements(IBoard board) throws Exception {
 
         try {
-
             List<ICell> optionalMovements = new ArrayList<>();
 
             ICoordinate currentCoordinate = getCoordinate();
@@ -47,9 +46,17 @@ public class PawnPiece extends AbstractPiece {
             return optionalMovements;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw e;
         }
 
+    }
+
+    @Override
+    public PawnPiece clone() {
+        PawnPiece cloned =  new PawnPiece(getCoordinate().clone(), getOwningPlayer().clone());
+        cloned.id = id;
+        cloned.isCaptured = isCaptured;
+        return cloned;
     }
 
     private boolean isValidCoordinate(IBoard board, int row, int column) {

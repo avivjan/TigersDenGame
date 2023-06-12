@@ -3,6 +3,7 @@ package TigersDen.BL.BoardService.BussinessLogic;
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardService.BussinessLogic.Pieces.PawnPiece;
+import TigersDen.BL.BoardService.BussinessLogic.Pieces.TigerPiece;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IObjectCreator;
@@ -44,9 +45,9 @@ public class ObjectCreator implements IObjectCreator {
     }
 
     @Override
-    public void createPieces() {
+    public void createPieces() throws Exception  {
         try {
-            IPiece piece = new PawnPiece(Coordinate.createSpacialInstance(), turnManager.getPlayerByRole("tiger"));
+            IPiece piece = new TigerPiece(Coordinate.createSpacialInstance(), turnManager.getPlayerByRole("tiger"));
             board.addPiece(piece);
 
             for (int row = numOfRows - 2; row < numOfRows; row++) {
@@ -59,6 +60,7 @@ public class ObjectCreator implements IObjectCreator {
         } catch (Exception e) {
             System.err.println("Error in createPieces");
             e.printStackTrace();
+            throw e;
         }
     }
 

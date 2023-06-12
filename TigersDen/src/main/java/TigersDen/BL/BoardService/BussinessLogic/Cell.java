@@ -53,6 +53,14 @@ public class Cell implements ICell{
     public boolean isEmpty() {
         return pieceOnIt == null;
     }
-    
+
+    @Override
+    public ICell clone() {
+        if (pieceOnIt == null)
+        {
+            return new Cell(status, false, coordinate.clone(), null);
+        }
+        return new Cell(status, false, coordinate.clone(), pieceOnIt.clone());
+    }    
     
 }

@@ -10,4 +10,6 @@ public interface ICoordinate {
     void setSpacial(boolean isSpacial);
     boolean isSpacial();
     boolean isOnBoard();
+    boolean equalByRowAndCol(ICoordinate other);
+    ICoordinate clone();
 }

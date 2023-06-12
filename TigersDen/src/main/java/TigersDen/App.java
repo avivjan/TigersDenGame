@@ -67,7 +67,6 @@ public class App extends PApplet {
             
             if(movementService.isMoving())
             {
-                System.out.println("is moving");
                 movementService.move();
             }
             
@@ -79,7 +78,12 @@ public class App extends PApplet {
 
     @Override
     public void mouseClicked(MouseEvent e){
-        clickEventHandler.handleClick(e);
+        try {
+            clickEventHandler.handleClick(e);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            this.exit();
+        }
     }
 
     public static void main(String[] args) {

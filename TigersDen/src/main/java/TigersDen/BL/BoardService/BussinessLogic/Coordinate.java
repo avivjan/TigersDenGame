@@ -154,6 +154,11 @@ public class Coordinate implements ICoordinate {
         Coordinate other = (Coordinate) obj;
         return other.x == x && other.y == y;
     }
+
+    @Override
+    public boolean equalByRowAndCol(ICoordinate other) {
+        return other.getRow() == getRow() && other.getColumn() == getColumn();
+    }
     
 
     public static  boolean isSpacialCoordinateByPixels(int x, int y) {
@@ -176,5 +181,16 @@ public class Coordinate implements ICoordinate {
     }
     private static int getRowForSpecialCell() {
         return -1;
+    }
+
+    @Override
+    public ICoordinate clone()
+    {
+        if (!initialized)
+        {
+            init();
+        }
+        return new Coordinate(x, y, isSpacial);
+
     }
 }

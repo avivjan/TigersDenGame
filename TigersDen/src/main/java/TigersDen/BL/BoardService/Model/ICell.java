@@ -12,5 +12,6 @@ public interface ICell {
     ICoordinate getCoordinate();
     void setStatus(CellStatus cs);
     boolean isEmpty();
+    ICell clone();
 }
 

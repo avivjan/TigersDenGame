@@ -6,7 +6,6 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardValidator.Contract.IBoardValidator;
-import TigersDen.BL.PlayerService.BussinesLogic.CpuPlayer;
 import TigersDen.BL.PlayerService.BussinesLogic.HumanPlayer;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
@@ -30,22 +29,20 @@ public class InMemoryTurnManager implements ITurnManager {
     }
 
     @Override
-    public void setNextPlayerInTurn() {
+    public void setNextPlayerInTurn() throws Exception {
         try {
-            String winner = boardValidator.getWinnerName();
+            String winner = boardValidator.getWinnerRole();
             if (winner != null) {
-                System.out.println("The winner is: " + boardValidator.getWinnerName());
+                System.out.println("The winner is: " + boardValidator.getWinnerRole());
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-            if (getPlayerInTurn() instanceof CpuPlayer) {
-                boolean isTurnOver = getPlayerInTurn().play(null);
-                if (isTurnOver)
-                {
-                    setNextPlayerInTurn();
-                }
+            IPlayer playerInTurn = getPlayerInTurn();
+            if (playerInTurn.isHuman() == false) {
+                playerInTurn.play(null);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
     }
 

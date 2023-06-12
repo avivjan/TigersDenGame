@@ -10,7 +10,16 @@ public class MovingDetails {
     private IPiece movingPiece;
     private ICell sourceCell;
     private ICell targetCell;
+    private int evaluationAfterTheMove;
     
+
+    public MovingDetails(IPiece piece,ICell sourceCell,ICell target, int evaluationAfterTheMove) {
+        this.movingPiece = piece;
+        this.targetCell = target;
+        this.sourceCell = sourceCell;
+        this.evaluationAfterTheMove = evaluationAfterTheMove;
+        this.pieceMovementSpeed = InjectorStorage.getInjector().getInstance(IConfigurationService.class).GetPieceMovementSpeed();
+    }
 
     public MovingDetails(IPiece piece,ICell sourceCell,ICell target) {
         this.movingPiece = piece;
@@ -18,6 +27,11 @@ public class MovingDetails {
         this.sourceCell = sourceCell;
         this.pieceMovementSpeed = InjectorStorage.getInjector().getInstance(IConfigurationService.class).GetPieceMovementSpeed();
     }
+
+    public int getEvaluationAfterTheMove() {
+        return evaluationAfterTheMove;
+    }
+
 
     public int getPieceMovementSpeed() {
         return pieceMovementSpeed;
@@ -57,5 +71,9 @@ public class MovingDetails {
     
     public ICell getSourceCell() {
         return sourceCell;
+    }
+
+    public void setEvaluationAfterTheMove(int evaluationAfterTheMove2) {
+        this.evaluationAfterTheMove = evaluationAfterTheMove2;
     }
 }

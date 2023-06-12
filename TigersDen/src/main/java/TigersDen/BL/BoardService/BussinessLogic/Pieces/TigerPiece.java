@@ -7,6 +7,7 @@ import TigersDen.BL.BoardService.BussinessLogic.AbstractPiece;
 import TigersDen.BL.BoardService.BussinessLogic.Coordinate;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.ICoordinate;
+import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
@@ -21,7 +22,7 @@ public class TigerPiece extends AbstractPiece {
     }
 
     @Override
-    public List<ICell> getOptionalMovements(IBoard board) {
+    public List<ICell> getOptionalMovements(IBoard board) throws Exception {
 
         try {
             List<ICell> optionalMovements = new ArrayList<>();
@@ -59,9 +60,15 @@ public class TigerPiece extends AbstractPiece {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw e;
         }
 
+    }
+    @Override
+    public IPiece clone() {
+        TigerPiece cloned =  new TigerPiece(getCoordinate().clone(), getOwningPlayer().clone());
+        cloned.isCaptured = isCaptured;
+        return cloned;
     }
 
     private boolean isValidCoordinate(IBoard board, int row, int column) {

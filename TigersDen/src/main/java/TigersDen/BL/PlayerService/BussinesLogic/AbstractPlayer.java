@@ -1,6 +1,5 @@
 package TigersDen.BL.PlayerService.BussinesLogic;
 
-import TigersDen.BL.MovementService.BussinessLogic.MovementService;
 import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
 import TigersDen.DI.InjectorStorage;
@@ -8,8 +7,8 @@ import TigersDen.DI.InjectorStorage;
 public abstract class AbstractPlayer implements IPlayer {
     private String name;
     private String color;
-    private boolean isHuman;
     private String role;
+    protected boolean isHuman;
     protected IMovementService movementService;
 
     public AbstractPlayer(String name, String color, String role) {
@@ -18,6 +17,8 @@ public abstract class AbstractPlayer implements IPlayer {
         this.role = role;
         movementService = InjectorStorage.getInjector().getInstance(IMovementService.class);
     }
+    @Override
+    public abstract IPlayer clone();
 
     @Override
     public String getName() {

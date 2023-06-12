@@ -5,7 +5,7 @@ import java.util.List;
 import TigersDen.BL.BoardService.Model.ICell;
 
 public interface IBoard {
-    ICell getCell(ICoordinate coordinate) throws Exception;
+    ICell getCell(ICoordinate coordinate);
 
     ICell getTigerDenCell();
 
@@ -13,7 +13,7 @@ public interface IBoard {
 
     void setSelectedCell(ICell cell);
 
-    void selectCell(ICell cell);
+    void selectCell(ICell cell) throws Exception;
 
     void DeselectCellIfExists();
 
@@ -30,4 +30,6 @@ public interface IBoard {
     void addCell(ICell cell);
 
     List<ICell> getCells();
+
+    IBoard clone();
 }

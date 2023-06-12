@@ -23,7 +23,7 @@ public class Board implements IBoard {
     }
 
     @Override
-    public ICell getCell(ICoordinate coordinate) throws Exception {
+    public ICell getCell(ICoordinate coordinate) {
         return boardData.getCell(coordinate);
     }
 
@@ -48,7 +48,7 @@ public class Board implements IBoard {
     }
 
     @Override
-    public void DeselectCellIfExists() {
+    public void DeselectCellIfExists()  {
         try {
             ICell selectedCell = getSelectedCell();
             if (selectedCell == null) {
@@ -64,11 +64,12 @@ public class Board implements IBoard {
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
     }
 
     @Override
-    public void selectCell(ICell cell) {
+    public void selectCell(ICell cell) throws Exception {
         try {
             DeselectCellIfExists();
             cell.setStatus(CellStatus.Selected);
@@ -87,6 +88,7 @@ public class Board implements IBoard {
             System.out.println("Cell " + cell.getCoordinate() + "selected");
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -118,5 +120,9 @@ public class Board implements IBoard {
     @Override
     public List<ICell> getCells() {
         return boardData.getCells();
+    }
+    @Override
+    public IBoard clone() {
+        return new Board(boardData.clone());
     }
 }

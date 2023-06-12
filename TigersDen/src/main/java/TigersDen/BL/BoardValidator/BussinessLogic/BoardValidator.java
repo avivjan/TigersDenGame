@@ -17,7 +17,7 @@ public class BoardValidator implements IBoardValidator {
     }
 
     @Override
-    public String getWinnerName() throws Exception {
+    public String getWinnerRole() throws Exception {
         if (isTigerWinner()) {
             return "tiger";
         } else if (isPawnsWinner()) {

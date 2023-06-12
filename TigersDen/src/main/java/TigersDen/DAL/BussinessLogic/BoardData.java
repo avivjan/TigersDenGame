@@ -34,8 +34,10 @@ public class BoardData implements IBoardData {
 
     private void init() {
         IConfigurationService cs = InjectorStorage.getInjector().getInstance(IConfigurationService.class);
-        this.numOfCols = cs.getNumOfCols();;
-        this.numOfRows = cs.getNumOfRows();;
+        this.numOfCols = cs.getNumOfCols();
+        ;
+        this.numOfRows = cs.getNumOfRows();
+        ;
         this.cellSizeInPixels = cs.getCellSize();
         board = new ICell[numOfRows][numOfCols];
         createBoardCells();
@@ -44,7 +46,9 @@ public class BoardData implements IBoardData {
 
     @Override
     public ICell getCell(ICoordinate coordinate) throws IllegalArgumentException {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         if (coordinate.isSpacial())
             return tigerDen;
         int row = coordinate.getRow();
@@ -57,31 +61,41 @@ public class BoardData implements IBoardData {
 
     @Override
     public ICell getSelectedCell() {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         return selectedCell;
     }
 
     @Override
     public void setSelectedCell(ICell cell) {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         selectedCell = cell;
     }
 
     @Override
     public void selectCell(ICell cell) {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         selectedCell = cell;
     }
 
     @Override
     public void DeselectCellIfExists() {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         selectedCell = null;
     }
 
     @Override
     public void addPiece(IPiece piece) {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         ICoordinate coordinate = piece.getCoordinate();
         pieces.add(piece);
         if (coordinate.isSpacial()) {
@@ -93,10 +107,11 @@ public class BoardData implements IBoardData {
 
     @Override
     public void addCell(ICell cell) {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         ICoordinate coordinate = cell.getCoordinate();
-        if(coordinate.isSpacial())
-        {
+        if (coordinate.isSpacial()) {
             tigerDen = cell;
             return;
         }
@@ -105,44 +120,60 @@ public class BoardData implements IBoardData {
 
     @Override
     public ICell getTigerDenCell() {
-        if (!initialized) {init();}
+        if (!initialized) {
+            init();
+        }
         return tigerDen;
     }
 
     private boolean isValidCoordinate(int row, int col) {// ToDO: move to BL
-        if (!initialized) {init();} 
+        if (!initialized) {
+            init();
+        }
         return row >= 0 && row < board.length && col >= 0 && col < board[row].length;
     }
 
     public int getCellSizeInPixels() {
-        if (!initialized) {init();} 
+        if (!initialized) {
+            init();
+        }
         return cellSizeInPixels;
     }
 
     public int getNumOfCols() {
-        if (!initialized) {init();} 
+        if (!initialized) {
+            init();
+        }
         return numOfCols;
     }
 
     public int getNumOfRows() {
-        if (!initialized) {init();} 
+        if (!initialized) {
+            init();
+        }
         return numOfRows;
     }
 
     public List<IPiece> getPieces() {
-        if (!initialized) {init();} 
+        if (!initialized) {
+            init();
+        }
         return pieces;
     }
 
     @Override
     public List<ICell> getOptionalCells() {
-        if (!initialized) {init();} 
+        if (!initialized) {
+            init();
+        }
         return optionCells;
     }
 
     @Override
     public void addOptionCells(ICell optionCell) {
-        if (!initialized) {init();} 
+        if (!initialized) {
+            init();
+        }
         optionCells.add(optionCell);
     }
 
@@ -152,7 +183,7 @@ public class BoardData implements IBoardData {
                 board[i][j] = new Cell(CellStatus.None, false, Coordinate.createInstance(i, j, false), null);
             }
         }
-        tigerDen =  new Cell(CellStatus.None, false, Coordinate.createSpacialInstance(), null);
+        tigerDen = new Cell(CellStatus.None, false, Coordinate.createSpacialInstance(), null);
     }
 
     @Override
@@ -165,5 +196,37 @@ public class BoardData implements IBoardData {
         }
         cells.add(tigerDen);
         return cells;
+    }
+
+    @Override
+    public IBoardData clone() {
+        BoardData clone = new BoardData();
+        clone.board = new ICell[numOfRows][numOfCols];
+        clone.numOfCols = numOfCols;
+        clone.numOfRows = numOfRows;
+        clone.cellSizeInPixels = cellSizeInPixels;
+        clone.pieces = new ArrayList<IPiece>();
+        clone.optionCells = new ArrayList<ICell>();
+        clone.tigerDen = tigerDen.clone();
+        if (tigerDen.getPieceOnIt() != null) {
+            clone.pieces.add(tigerDen.getPieceOnIt());
+        }
+        if (selectedCell != null) {
+            clone.selectedCell = selectedCell.clone();
+        }
+        for (int i = 0; i < numOfRows; i++) {
+            for (int j = 0; j < numOfCols; j++) {
+                ICell cell = board[i][j].clone();
+                clone.board[i][j] = cell;
+                if (cell.getPieceOnIt() != null) {
+                    clone.pieces.add(cell.getPieceOnIt());
+                }
+                if (cell.getStatus() == CellStatus.Option) {
+                    clone.optionCells.add(cell);
+                }
+            }
+        }
+        clone.initialized = initialized;
+        return clone;
     }
 }

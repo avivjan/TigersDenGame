@@ -8,6 +8,7 @@ import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
+import TigersDen.BL.PlayerService.Contract.IPlayer;
 import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 import processing.event.MouseEvent;
 
@@ -23,22 +24,23 @@ public class EventHandlerService implements IEventHandlerService {
     }
 
     @Override
-    public void handleClick(MouseEvent event) {
+    public void handleClick(MouseEvent event) throws Exception {
         try {
-            System.out.println("Mouse Clicked" + "(x: " + event.getX() + ", " + event.getY() + ")");
+            IPlayer getPlayerInTurn = turnManager.getPlayerInTurn();
+            if (getPlayerInTurn.isHuman() == false) {
+                System.out.println("Please wait for the CPU to finish his turn.");
+                return;
+            }
             ICoordinate cor = Coordinate.createInstance(event.getX(), event.getY(), true);
             ICell cellClicked = board.getCell(cor);
             if (cellClicked == null) {
                 System.err.println("The cell you pressed is not on the board!");
                 return;
             }
-            boolean isTurnOver = turnManager.getPlayerInTurn().play(cellClicked);
-            if (isTurnOver)
-            {
-                turnManager.setNextPlayerInTurn();
-            }
+            getPlayerInTurn.play(cellClicked);
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
     }
 }

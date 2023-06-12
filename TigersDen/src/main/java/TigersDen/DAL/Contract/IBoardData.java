@@ -36,5 +36,7 @@ public interface IBoardData {
     void DeselectCellIfExists(); 
 
     List<ICell> getCells();
+
+    IBoardData clone();
     
 }

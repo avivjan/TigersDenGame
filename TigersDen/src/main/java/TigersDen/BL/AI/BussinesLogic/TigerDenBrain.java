@@ -17,7 +17,7 @@ import TigersDen.BL.BoardValidator.Contract.IBoardValidator;
 import TigersDen.BL.MovementService.DataModel.MovingDetails;
 
 public class TigerDenBrain implements ITigerDenBrain {
-    private final int MAX_DEPTH = 2;
+    private final int MAX_DEPTH = 3;
     private IBoardValidator boardValidator;
 
     @Inject
@@ -194,9 +194,9 @@ public class TigerDenBrain implements ITigerDenBrain {
         double totalDistanceToTiger = calculateTotalDistancesSquaredToTiger(board);
         int numOfTigerPossibleMoves = getNumOfTigerPossibleMoves(board);
 
-        double piecesWeight = 10;
-        double distanceWeight = 0;
-        double possibleMovesWeight = 0;
+        double piecesWeight = 1;
+        double distanceWeight = 1/50;
+        double possibleMovesWeight = 1;
 
         return piecesWeight * numPiecesNotCaptured +
                 distanceWeight * totalDistanceToTiger +

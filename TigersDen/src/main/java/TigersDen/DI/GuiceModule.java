@@ -16,6 +16,8 @@ import TigersDen.BL.ConfigurationService.BussinessLogic.JsonConfigurationService
 import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.BL.EventHanlderService.BussinessLogic.EventHandlerService;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
+import TigersDen.BL.GameStateService.BussinessLogic.GameStateService;
+import TigersDen.BL.GameStateService.Contract.IGameStateService;
 import TigersDen.BL.MovementService.BussinessLogic.MovementService;
 import TigersDen.BL.MovementService.Contract.IMovementService;
 import TigersDen.BL.TurnManager.BussinessLogic.InMemoryTurnManager;
@@ -53,6 +55,7 @@ public class GuiceModule extends AbstractModule {
         bind(IBoardData.class).to(BoardData.class).in(Singleton.class);
         bind(IBoardValidator.class).to(BoardValidator.class).in(Singleton.class);
         bind(ITigerDenBrain.class).to(TigerDenBrain.class).in(Singleton.class);
+        bind(IGameStateService.class).to(GameStateService.class).in(Singleton.class);
         
     }
     

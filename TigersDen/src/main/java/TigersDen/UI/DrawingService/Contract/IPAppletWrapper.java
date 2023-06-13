@@ -9,4 +9,6 @@ public interface IPAppletWrapper {
     void textSize(int size);
     PImage loadImage(String path);
     void image(PImage image, float x, float y, float width, float height);
+    void text(String text, float x, float y);
+    void textAlign(int center, int center2);
 }

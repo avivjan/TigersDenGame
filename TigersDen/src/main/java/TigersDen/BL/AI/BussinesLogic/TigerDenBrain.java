@@ -194,8 +194,8 @@ public class TigerDenBrain implements ITigerDenBrain {
         double totalDistanceToTiger = calculateTotalDistancesSquaredToTiger(board);
         int numOfTigerPossibleMoves = getNumOfTigerPossibleMoves(board);
 
-        double piecesWeight = 1;
-        double distanceWeight = 1/50;
+        double piecesWeight = 10;
+        double distanceWeight = 1/25;
         double possibleMovesWeight = 1;
 
         return piecesWeight * numPiecesNotCaptured +

@@ -47,13 +47,8 @@ public class JsonConfigurationService implements IConfigurationService {
             throw new IllegalArgumentException("Number of rows is not positive");
         if (configurationData.getNumOfCols() <= 0)
             throw new IllegalArgumentException("Number of columns is not positive");
-        if (configurationData.getPlayersDetails() == null || configurationData.getPlayersDetails().isEmpty())
-            throw new IllegalArgumentException("Players details is empty");
         if (configurationData.getPieceMovementSpeed() <= 0)
             throw new IllegalArgumentException("Piece movement speed is not positive");
-        if (configurationData.getPlayersDetails().size() != 2) {
-            throw new IllegalArgumentException("Number of players is not 2");
-        }
         int numOfPawnsPlayers = 0;
         int numofTigerPlayers = 0;
         for (PlayerDetails playerDetails : configurationData.getPlayersDetails()) {
@@ -71,12 +66,6 @@ public class JsonConfigurationService implements IConfigurationService {
             throw new IllegalArgumentException("Player role is not valid");
 
         }
-        if (numOfPawnsPlayers != 1) {
-            throw new IllegalArgumentException("Number of players with role pawns is not 1");
-        }
-        if (numofTigerPlayers != 1) {
-            throw new IllegalArgumentException("Number of players with role tiger is not 1");
-        }
     }
 
     private String readJsonFile(String filePath) throws IOException {
@@ -84,6 +73,10 @@ public class JsonConfigurationService implements IConfigurationService {
         return new String(Files.readAllBytes(path));
     }
 
+    @Override
+    public void addPlayerDetails(PlayerDetails playerDetails) {
+        configurationData.getPlayersDetails().add(playerDetails);
+    }
     @Override
     public String getAssetsPath() {
         return configurationData.getAssetsPath();

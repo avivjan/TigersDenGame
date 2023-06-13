@@ -19,7 +19,6 @@ public class MovementService implements IMovementService {
     public MovementService(IBoard board, ITurnManager turnManager) {
         this.board = board;
         this.turnManager = turnManager;
-        System.out.println("MovementService: created!!!!!!!!!!!!!!!");
     }
 
     @Override

@@ -52,4 +52,14 @@ public class PAppletWrapper implements IPAppletWrapper {
         applet.image(image, x, y, width, height);
     }
 
+    @Override
+    public void text(String text, float x, float y) {
+        applet.text(text, x, y);
+    }
+
+    @Override
+    public void textAlign(int center, int center2) {
+        applet.textAlign(center, center2);
+    }
+
 }

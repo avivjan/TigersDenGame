@@ -22,4 +22,6 @@ public interface IConfigurationService {
     List<PlayerDetails> getPlayersDetails();
 
     int GetPieceMovementSpeed();
+
+    void addPlayerDetails(PlayerDetails playerDetails);
 }

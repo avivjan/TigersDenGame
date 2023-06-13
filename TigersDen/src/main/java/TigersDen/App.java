@@ -44,15 +44,10 @@ public class App extends PApplet {
             Injector injector = Guice.createInjector(new GuiceModule(this));
             InjectorStorage.setInjector(injector);
             this.drawingService = injector.getInstance(IDrawingService.class);
-            this.objectCreator = injector.getInstance(IObjectCreator.class);
             this.clickEventHandler = injector.getInstance(IEventHandlerService.class);
             this.movementService = injector.getInstance(IMovementService.class);
             this.boardData = injector.getInstance(IBoardData.class);
-           
             
-
-            objectCreator.createPlayers();
-            objectCreator.createPieces();
         } catch (Exception e) {
             e.printStackTrace();
         }

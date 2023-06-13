@@ -6,20 +6,7 @@
     "assetsSize": 100,
     "numOfRows": 9,
     "numOfCols": 9,
-    "playersDetails": [
-      {
-        "name": "Human Player",
-        "color": "white",
-        "isHuman": true,
-        "role": "pawns"
-      },
-      {
-        "name": "Computer Player",
-        "color": "black",
-        "isHuman": false,
-        "role": "tiger"
-      }
-    ],
+    "playersDetails": [],
     "pieceMovementSpeed": 7
   }
   

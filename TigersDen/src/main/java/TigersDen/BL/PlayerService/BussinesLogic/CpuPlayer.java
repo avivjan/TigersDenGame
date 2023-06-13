@@ -27,9 +27,7 @@ public class CpuPlayer extends AbstractPlayer {
         if (cellClicked != null) {
             throw new Exception("The play method of the CpuPlayer class should not be called with a cell.");
         }
-        // Something is wrong here - the is changed after the ai. piece onto the
-        // tigerden is moved!
-        Move AIMove = brain.minimax(board, 0, true);
+        Move AIMove = brain.minimax(board, 0, getRole()=="tiger");
         MovingDetails movingDetails = generateMovingDetailsFromAIMove(AIMove);
         movementService.ApplyMove(movingDetails);
         if (movingDetails.getCapturedPieceCoordinate() != null)
@@ -64,4 +62,6 @@ public class CpuPlayer extends AbstractPlayer {
     public IPlayer clone() {
         return new CpuPlayer(getName(), getColor(), getRole());
     }
+
+    
 }

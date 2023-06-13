@@ -6,6 +6,10 @@ import TigersDen.BL.GameStateService.DataModel.GameState;
 public class GameStateService implements IGameStateService {
     private GameState gameState;
 
+    public GameStateService() {
+        gameState = GameState.MAIN_MENU;
+    }
+
     @Override
     public void setGameState(GameState gameState) {
         this.gameState = gameState;

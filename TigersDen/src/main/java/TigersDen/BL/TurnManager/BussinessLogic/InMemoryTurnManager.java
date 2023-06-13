@@ -1,6 +1,7 @@
 package TigersDen.BL.TurnManager.BussinessLogic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -33,7 +34,7 @@ public class InMemoryTurnManager implements ITurnManager {
         try {
             String winner = boardValidator.getWinnerRole();
             if (winner != null) {
-                System.out.println("The winner is: " + boardValidator.getWinnerRole());
+                boardValidator.updateWinner();
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
             IPlayer playerInTurn = getPlayerInTurn();
@@ -76,6 +77,7 @@ public class InMemoryTurnManager implements ITurnManager {
     @Override
     public void addPlayer(IPlayer player) {
         players.add(player);
+        Collections.sort(players);
     }
 
     @Override

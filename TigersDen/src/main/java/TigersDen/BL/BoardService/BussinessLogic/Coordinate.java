@@ -14,15 +14,13 @@ public class Coordinate implements ICoordinate {
     private static int numOfRows;
     private static int numOfCols;
 
-
     private Coordinate(int x, int y, boolean isSpacial) {
         this.x = x;
         this.y = y;
         this.isSpacial = isSpacial;
     }
 
-    private static void init()
-    {
+    private static void init() {
         IConfigurationService cs = InjectorStorage.getInjector().getInstance(IConfigurationService.class);
         Coordinate.numOfCols = cs.getNumOfCols();
         Coordinate.numOfRows = cs.getNumOfRows();
@@ -31,16 +29,25 @@ public class Coordinate implements ICoordinate {
     }
 
     public static Coordinate createSpacialInstance() {
-        if (!initialized)
-        {
+        if (!initialized) {
             init();
         }
         return new Coordinate(getXInPixelForSpecialCell(), getYInPixelForSpecialCell(), true);
     }
 
+    private static Coordinate createSpacialInstanceWithPixels(int x, int y) {
+        if (!initialized) {
+            init();
+        }
+        if (!isSpacialCoordinateByPixels(x, y)) {
+
+            throw new IllegalArgumentException("This is not a spacial coordinate");
+        }
+        return new Coordinate(x, y, true);
+    }
+
     public static Coordinate createInstance(int x, int y, boolean inPixels) {
-        if (!initialized)
-        {
+        if (!initialized) {
             init();
         }
         if (!isOnBoard(x, y, inPixels)) {
@@ -48,17 +55,17 @@ public class Coordinate implements ICoordinate {
         }
         if (inPixels) {
             if (isSpacialCoordinateByPixels(x, y)) {
-                return createSpacialInstance();
+                return createSpacialInstanceWithPixels(x,y);
             }
             return new Coordinate(x, y, false);
 
         } else {
-            int row = x;//Naming purposes
+            int row = x;// Naming purposes
             int col = y;
             if (isSpacialCoordinateByRowAndCol(row, col)) {
                 return createSpacialInstance();
             }
-            return new Coordinate(col*cellSize, (row+1)*cellSize, false);
+            return new Coordinate(col * cellSize, (row + 1) * cellSize, false);
         }
 
     }
@@ -131,9 +138,7 @@ public class Coordinate implements ICoordinate {
                 return true;
             }
             return isSpacialCoordinateByPixels(x, y);
-        }
-        else
-        {
+        } else {
             if (x >= 0 && x < numOfCols && y >= 0 && y < numOfRows) {
                 return true;
             }
@@ -159,35 +164,35 @@ public class Coordinate implements ICoordinate {
     public boolean equalByRowAndCol(ICoordinate other) {
         return other.getRow() == getRow() && other.getColumn() == getColumn();
     }
-    
 
-    public static  boolean isSpacialCoordinateByPixels(int x, int y) {
-        return x == getXInPixelForSpecialCell() && y == getYInPixelForSpecialCell();
+    public static boolean isSpacialCoordinateByPixels(int x, int y) {
+        return x >= getXInPixelForSpecialCell() && x < getXInPixelForSpecialCell() + cellSize &&
+                y >= getYInPixelForSpecialCell() && y < getYInPixelForSpecialCell() + cellSize;
     }
 
     private static int getXInPixelForSpecialCell() {
         return numOfCols / 2 * cellSize;
     }
+
     private static int getYInPixelForSpecialCell() {
         return 0;
     }
 
-    public static  boolean isSpacialCoordinateByRowAndCol(int x, int y) {
+    public static boolean isSpacialCoordinateByRowAndCol(int x, int y) {
         return x == getColoumnForSpecialCell() && y == getRowForSpecialCell();
     }
 
     private static int getColoumnForSpecialCell() {
         return numOfCols / 2;
     }
+
     private static int getRowForSpecialCell() {
         return -1;
     }
 
     @Override
-    public ICoordinate clone()
-    {
-        if (!initialized)
-        {
+    public ICoordinate clone() {
+        if (!initialized) {
             init();
         }
         return new Coordinate(x, y, isSpacial);

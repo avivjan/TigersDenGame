@@ -21,6 +21,19 @@ public abstract class AbstractPlayer implements IPlayer {
     public abstract IPlayer clone();
 
     @Override
+    public int compareTo(IPlayer o) {
+        if (this.isHuman())
+        {
+            return -1;
+        }
+        if (o.isHuman())
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
     public String getName() {
         return this.name;
     }

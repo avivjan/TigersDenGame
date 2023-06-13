@@ -2,7 +2,7 @@ package TigersDen.BL.PlayerService.Contract;
 
 import TigersDen.BL.BoardService.Model.ICell;
 
-public interface IPlayer
+public interface IPlayer extends Comparable<IPlayer>
 {
     String getName();
 

@@ -49,23 +49,6 @@ public class JsonConfigurationService implements IConfigurationService {
             throw new IllegalArgumentException("Number of columns is not positive");
         if (configurationData.getPieceMovementSpeed() <= 0)
             throw new IllegalArgumentException("Piece movement speed is not positive");
-        int numOfPawnsPlayers = 0;
-        int numofTigerPlayers = 0;
-        for (PlayerDetails playerDetails : configurationData.getPlayersDetails()) {
-            if (playerDetails.getRole().equals("pawns"))
-            {
-                numOfPawnsPlayers++;
-                continue;
-            }
-            if (playerDetails.getRole().equals("tiger"))
-            {
-                numofTigerPlayers++;
-                continue;
-            }
-
-            throw new IllegalArgumentException("Player role is not valid");
-
-        }
     }
 
     private String readJsonFile(String filePath) throws IOException {

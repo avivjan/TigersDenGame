@@ -3,7 +3,6 @@ package TigersDen;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import TigersDen.BL.BoardService.Contract.IObjectCreator;
 import TigersDen.BL.ConfigurationService.Contract.IConfigurationService;
 import TigersDen.BL.EventHanlderService.Contract.IEventHandlerService;
 import TigersDen.BL.MovementService.Contract.IMovementService;
@@ -21,7 +20,6 @@ public class App extends PApplet {
     public static final int FPS = 60;
 
     private IDrawingService drawingService;
-    private IObjectCreator objectCreator;
     private IEventHandlerService clickEventHandler;
     private IMovementService movementService;
     IBoardData boardData;

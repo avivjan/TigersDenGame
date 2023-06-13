@@ -17,7 +17,7 @@ import TigersDen.BL.BoardValidator.Contract.IBoardValidator;
 import TigersDen.BL.MovementService.DataModel.MovingDetails;
 
 public class TigerDenBrain implements ITigerDenBrain {
-    private final int MAX_DEPTH = 3;
+    private final int MAX_DEPTH = 4;
     private IBoardValidator boardValidator;
 
     @Inject
@@ -29,14 +29,14 @@ public class TigerDenBrain implements ITigerDenBrain {
     public Move minimax(IBoard boardToMakeMoveOnit, int depth, boolean isTigerPlayer) throws Exception {
         try {
             System.out.println("String minimax method. depth:" + depth);
-            if (boardValidator.getWinnerRole() != null || depth == MAX_DEPTH) {
+            if (boardValidator.getWinnerRole(boardToMakeMoveOnit) != null || depth == MAX_DEPTH) {
                 return new Move(-1, -1, -1, -1, null, evaluate(boardToMakeMoveOnit));
             }
 
             if (isTigerPlayer) {
                 List<Move> possibleMoves = generatePossibleMovesForTiger(boardToMakeMoveOnit);
                 if (possibleMoves.size() == 0) {
-                    throw new Exception("No possible moves for the tiger player.");
+                    return new Move(-1, -1, -1, -1, null, evaluate(boardToMakeMoveOnit));
                 }
 
                 Move bestMove = possibleMoves.get(0);
@@ -132,9 +132,8 @@ public class TigerDenBrain implements ITigerDenBrain {
     private List<Move> generatePossibleMovesForTiger(IBoard boardToMakeMoveOnIt) throws Exception {
         IPiece tigerPiece = null;
         for (IPiece piece : boardToMakeMoveOnIt.getPieces().stream()
-                                                           .filter(piece -> !piece.isCaptured())
-                                                           .collect(Collectors.toList())) 
-        {
+                .filter(piece -> !piece.isCaptured())
+                .collect(Collectors.toList())) {
             if (piece.getOwningPlayer().getRole().equals("tiger")) {
                 if (tigerPiece != null) {
                     throw new Exception("More than one tiger piece found on the board.");
@@ -167,11 +166,10 @@ public class TigerDenBrain implements ITigerDenBrain {
         List<IPiece> optionalPieces = new ArrayList<>();
 
         for (IPiece piece : boardToMakeMoveOint.getPieces().stream()
-                                                           .filter(piece -> !piece.isCaptured()
-                                                                     && piece.getOwningPlayer().getRole().equals("pawns"))
-                                                           .collect(Collectors.toList()))
-        {
-                optionalPieces.add(piece);
+                .filter(piece -> !piece.isCaptured()
+                        && piece.getOwningPlayer().getRole().equals("pawns"))
+                .collect(Collectors.toList())) {
+            optionalPieces.add(piece);
         }
 
         for (IPiece optionalPiece : optionalPieces) {
@@ -190,12 +188,23 @@ public class TigerDenBrain implements ITigerDenBrain {
     }
 
     private double evaluate(IBoard board) throws Exception {
+        String winnerRole = boardValidator.getWinnerRole(board);
+        if (winnerRole != null && !winnerRole.isEmpty()) {
+            if (winnerRole.equals("tiger")) {
+                return Double.POSITIVE_INFINITY;
+            }
+            if (winnerRole.equals("pawns")) {
+                return Double.NEGATIVE_INFINITY;
+            }
+            throw new Exception("Unknown winner role: " + winnerRole);
+        }
+
         int numPiecesNotCaptured = countPiecesCaptured(board);
         double totalDistanceToTiger = calculateTotalDistancesSquaredToTiger(board);
         int numOfTigerPossibleMoves = getNumOfTigerPossibleMoves(board);
 
-        double piecesWeight = 10;
-        double distanceWeight = 1/25;
+        double piecesWeight = 800;
+        double distanceWeight = 1;
         double possibleMovesWeight = 1;
 
         return piecesWeight * numPiecesNotCaptured +

@@ -5,32 +5,40 @@ import com.google.inject.Inject;
 import TigersDen.BL.BoardService.Contract.IBoard;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardValidator.Contract.IBoardValidator;
-import TigersDen.BL.GameStateService.BussinessLogic.GameStateService;
+import TigersDen.BL.GameStateService.Contract.IGameStateService;
 import TigersDen.BL.GameStateService.DataModel.GameState;
-import TigersDen.BL.TurnManager.Contracts.ITurnManager;
 
 public class BoardValidator implements IBoardValidator {
-
-    private final IBoard board;
-    private GameStateService gameStateService;
+    private IBoard realBoard;
+    private IGameStateService gameStateService;
 
     @Inject
-    public BoardValidator(IBoard board, ITurnManager turnManager, GameStateService gameStateService) {
-        this.board = board;
+    public BoardValidator(IBoard board, IGameStateService gameStateService) {
+        this.realBoard = board;
         this.gameStateService = gameStateService;
     }
 
     @Override
-    public String getWinnerRole() throws Exception {
-        if (isTigerWinner()) {
+    public String getWinnerRole(IBoard board) throws Exception {
+        if (isTigerWinner(board)) {
             return "tiger";
-        } else if (isPawnsWinner()) {
+        } else if (isPawnsWinner(board)) {
             return "pawns";
         }
         return null;
     }
 
-    private boolean isPawnsWinner() throws Exception {
+    @Override
+    public String getWinnerRole() throws Exception {
+        if (isTigerWinner(realBoard)) {
+            return "tiger";
+        } else if (isPawnsWinner(realBoard)) {
+            return "pawns";
+        }
+        return null;
+    }
+    
+    private boolean isPawnsWinner(IBoard board) throws Exception {
         for (IPiece piece : board.getPieces()) {
             if (piece.getOwningPlayer().getRole().equals("tiger"))
                 ;
@@ -44,7 +52,7 @@ public class BoardValidator implements IBoardValidator {
         throw new Exception("there is no player with the role of tiger");
     }
 
-    private boolean isTigerWinner() {
+    private boolean isTigerWinner(IBoard board) {
         int alivePawnsCount = 0;
         for (IPiece piece : board.getPieces()) {
             if (piece.getOwningPlayer().getRole().equals("pawns") && !piece.isCaptured()) {
@@ -55,8 +63,8 @@ public class BoardValidator implements IBoardValidator {
     }
 
     @Override
-    public void updateWinner() throws Exception {
-        String winnerRole = getWinnerRole();
+    public void updateWinner(IBoard board, IGameStateService gameStateService) throws Exception {
+        String winnerRole = getWinnerRole(board);
         if (winnerRole == null) {
             throw new Exception("UpdateWinner: there is no winner");
         }
@@ -65,6 +73,19 @@ public class BoardValidator implements IBoardValidator {
         } else {
             gameStateService.setGameState(GameState.PAWNS_WIN_SCREEN);
         }
-        
     }
+
+    @Override
+    public void updateWinner() throws Exception {
+        String winnerRole = getWinnerRole(realBoard);
+        if (winnerRole == null) {
+            throw new Exception("UpdateWinner: there is no winner");
+        }
+        if (winnerRole == "tiger") {
+            gameStateService.setGameState(GameState.TIGER_WIN_SCREEN);
+        } else {
+            gameStateService.setGameState(GameState.PAWNS_WIN_SCREEN);
+        }
+    }
+
 }

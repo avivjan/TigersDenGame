@@ -35,6 +35,7 @@ public class InMemoryTurnManager implements ITurnManager {
             String winner = boardValidator.getWinnerRole();
             if (winner != null) {
                 boardValidator.updateWinner();
+                return;
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
             IPlayer playerInTurn = getPlayerInTurn();

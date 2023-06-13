@@ -50,6 +50,7 @@ public class ObjectCreator implements IObjectCreator {
         try {
             IPiece piece = new TigerPiece(Coordinate.createSpacialInstance(), turnManager.getPlayerByRole("tiger"));
             board.addPiece(piece);
+
             for (int row = numOfRows - 2; row < numOfRows; row++) {
                 for (int column = 0; column < numOfCols; column++) {
                     ICoordinate tempCor = Coordinate.createInstance(row, column, false);
@@ -57,7 +58,7 @@ public class ObjectCreator implements IObjectCreator {
                             turnManager.getPlayerByRole("pawns"));
                     board.addPiece(tmpPiece);
                 }
-            }
+            }           
         } catch (Exception e) {
             System.err.println("Error in createPieces");
             e.printStackTrace();

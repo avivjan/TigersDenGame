@@ -1,6 +1,7 @@
 package TigersDen.BL.PlayerService.BussinesLogic;
 
 import TigersDen.BL.BoardService.Contract.IBoard;
+import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.DataModel.CellStatus;
 import TigersDen.BL.BoardService.Model.ICell;
 import TigersDen.BL.PlayerService.Contract.IPlayer;
@@ -30,10 +31,19 @@ public class HumanPlayer extends AbstractPlayer{
                 if (cellStatus == CellStatus.OptionWithCapture)
                 {
                     //capture
-                    cellClicked.getPieceOnIt().capture(null);
+                    ICell selectedCell = board.getSelectedCell();
+                    ICoordinate pieceToCaptureCor = selectedCell.getPieceOnIt().getOptionalMovements(board)
+                                                                .stream()
+                                                                .filter(movingDetails -> 
+                                                                        movingDetails.getTargetCell() == cellClicked)
+                                                                .findFirst()
+                                                                .get()
+                                                                .getCapturedPieceCoordinate();
+                    board.getCell(pieceToCaptureCor).getPieceOnIt().capture(null);
                     cellClicked.setPieceOnIt(null);
                 }
                 movementService.ApplyMove(board.getSelectedCell().getPieceOnIt(),board.getSelectedCell(), cellClicked);
+                return;
             }
             if (!cellClicked.canBeSelected()) {
                 System.out.println("Cell cannot be selected");

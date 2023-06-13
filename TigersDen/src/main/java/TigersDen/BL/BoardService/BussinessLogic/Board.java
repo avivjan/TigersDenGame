@@ -3,6 +3,10 @@ package TigersDen.BL.BoardService.BussinessLogic;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.lang.model.util.ElementScanner6;
+
+import org.checkerframework.checker.units.qual.m;
+
 import com.google.inject.Inject;
 
 import TigersDen.BL.BoardService.Contract.IBoard;
@@ -10,6 +14,7 @@ import TigersDen.BL.BoardService.Contract.ICoordinate;
 import TigersDen.BL.BoardService.Contract.IPiece;
 import TigersDen.BL.BoardService.DataModel.CellStatus;
 import TigersDen.BL.BoardService.Model.ICell;
+import TigersDen.BL.MovementService.DataModel.MovingDetails;
 import TigersDen.DAL.Contract.IBoardData;
 
 public class Board implements IBoard {
@@ -75,17 +80,22 @@ public class Board implements IBoard {
             DeselectCellIfExists();
             cell.setStatus(CellStatus.Selected);
             setSelectedCell(cell);
-            for (ICell optionalCell : cell.getPieceOnIt().getOptionalMovements(this)
-                                                         .stream()
-                                                         .map(movingDetails ->movingDetails.getTargetCell())
-                                                         .collect(Collectors.toList()))
+            for (MovingDetails movingDetails : cell.getPieceOnIt().getOptionalMovements(this))
             {
+                ICell optionalCell = movingDetails.getTargetCell();
                 if (optionalCell.getPieceOnIt() != null && optionalCell.getPieceOnIt().getOwningPlayer() != this) {
                     optionalCell.setStatus(CellStatus.OptionWithCapture);
                     System.out.println("Cell " + optionalCell.getCoordinate() + " is an option with capture");
                     continue;
                 }
-                optionalCell.setStatus(CellStatus.Option);
+                if (movingDetails.getCapturedPieceCoordinate() != null)
+                {
+                    optionalCell.setStatus(CellStatus.OptionWithCapture);
+                }
+                else {
+                    optionalCell.setStatus(CellStatus.Option);
+                }
+                
                 boardData.addOptionCells(optionalCell);
                 System.out.println("Cell " + optionalCell.getCoordinate() + " is an option");
             }

@@ -8,6 +8,7 @@ public class GameStateService implements IGameStateService {
 
     public GameStateService() {
         gameState = GameState.MAIN_MENU;
+        System.out.println("GameStateService created");
     }
 
     @Override
